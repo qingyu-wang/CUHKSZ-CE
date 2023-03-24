@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="UTF-8">
+    <head>
+        {% block head %}
+
+            {% block title %}
+            <title>国情教育 · 实践系统 | 香港中文大学 · 深圳</title>
+            {% endblock %}
+
+            {% block style %}
+            <link rel="shortcut icon" href="/static/image/favicon.ico">
+            <link rel="stylesheet" type="text/css" href="/static/css/normalize@8.0.1.css">
+            <link rel="stylesheet" type="text/css" href="/static/css/bulma@0.9.4.min.css">
+            <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+            {% endblock %}
+
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            {% block navbar %}
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <!-- 标题 -->
+                    <a class="navbar-item" style="padding: 0 1rem" href="{{ url_for("view_index.index") }}">
+                        <img src="/static/image/logo-h.png">
+                    </a>
+
+                    <!-- 展开按钮 screen min-width < 1024px -->
+                    <a class="navbar-burger" role="button" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+
+                <div id="navbarBasicExample" class="navbar-menu">
+                    <!-- 主导航栏 -->
+                    <div class="navbar-start">
+                        {% for nav1_name, nav1_info in nav.items() %}
+                            <!-- 一级选项 容器（可下拉） -->
+                            <div class="navbar-item has-dropdown is-hoverable">
+                                <!-- 一级选项 内容 -->
+                                {% if nav1_info["url"] %}
+                                    <a class="navbar-link is-arrowless" href="{{ nav1_info["url"] }}">{{ nav1_name }}</a>
+                                {% else %}
+                                    <a class="navbar-link is-arrowless no-link">{{ nav1_name }}</a>
+                                {% endif %}
+                                {% if nav1_info["sub"]|length != 0 %}
+                                    <!-- 二级选项 容器（下拉） -->
+                                    <div class="navbar-dropdown is-boxed">
+                                        {% for nav2_name, nav2_info in nav1_info["sub"].items() %}
+                                            {% if nav2_name[:3] == "---" and nav2_name[-3:] == "---" %}
+                                                <!-- 二级选项 分割线 -->
+                                                <hr class="navbar-divider">
+                                            {% else %}
+                                                <!-- 二级选项 内容-->
+                                                <a class="navbar-item" href="{{ nav2_info["url"] }}">{{ nav2_name }}</a>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- 副导航栏 -->
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div class="buttons">
+                            {% if current_user.is_anonymous %}
+                                <a class="button is-primary" style="width: 5rem" href="{{ url_for("view_auth.login") }}">登录</a>
+                                <a class="button is-light"   style="width: 5rem" href="{{ url_for("view_auth.signup") }}">注册</a>
+                            {% else %}
+                                {% if current_user.role == "guest" %}
+                                    <a class="button is-primary" style="width: max-content" href="{{ url_for("view_auth.account") }}">{{ current_user.username }} (访客)</a>
+                                {% elif current_user.role == "staff" %}
+                                    <a class="button is-primary" style="width: max-content" href="{{ url_for("view_auth.account") }}">{{ current_user.username }} (教工)</a>
+                                {% elif current_user.role == "admin" %}
+                                    <a class="button is-primary" style="width: max-content" href="{{ url_for("view_auth.account") }}">{{ current_user.username }} (管理员)</a>
+                                {% else %}
+                                    <a class="button is-primary" style="width: max-content" href="{{ url_for("view_auth.account") }}">账户</a>
+                                {% endif %}
+                                <a class="button is-light"   style="width: 5rem" href="{{ url_for("view_auth.logout") }}">登出</a>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </nav>
+            {% endblock %}
+
+            {% block content %}
+            {% endblock %}
+
+            {% block footer %}
+            {% endblock %}
+
+            <!-- <script src="/static/js/react@18.2.0.production.min.js" crossorigin></script> -->
+            <!-- <script src="/static/js/react-dom@18.2.0.production.min.js" crossorigin></script> -->
+            <!-- <script src="/static/js/babel-standalone@6.26.0.min.js"></script> -->
+            <script>
+            // 当 screen min-width < 1024px，通过点击展开按钮，显示导航栏
+            (() =>{
+                var navbarBurger = document.querySelector('.navbar-burger');
+                var navbarMenu = document.querySelector('#'+navbarBurger.dataset.target);
+                navbarBurger.addEventListener('click', () =>{
+                    navbarBurger.classList.toggle('is-active');
+                    navbarMenu.classList.toggle('is-active');
+                });
+            })();
+            </script>
+
+            {% block script %}
+            {% endblock %}
+
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_user.info_for_admin") }}">
+                <h1>人员管理</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- 查询信息 -->
+    <div class="box">
+
+        <div class="box-invis">
+            <div class="content">
+                <h2>查询信息</h2>
+            </div>
+        </div>
+
+        <div class="box-invis">
+
+            <form action="{{ url_for("view_user.info_for_admin") }}" method="POST">
+                <div class="field has-addons">
+                    {% set __name        = "campus_idno" %}
+                    {% set __default     = config["search"][__name]["default"] %}
+                    {% set __placeholder = config["search"][__name]["placeholder"] %}
+                    {% if __default is not none %}
+                        <div class="control"><input class="input" type="text" name="{{ __name }}" placeholder="{{ __placeholder }}" value="{{ __default }}"></div>
+                    {% else %}
+                        <div class="control"><input class="input" type="text" name="{{ __name }}" placeholder="{{ __placeholder }}"></div>
+                    {% endif %}
+                    <div class="control"><button class="button is-base" type="submit" name="method" value="search_idno">查询</button></div>
+                    <div class="control"><button class="button"         type="reset"                                   >重置</button></div>
+                </div>
+            </form>
+
+            <form action="{{ url_for("view_user.info_for_admin") }}" method="POST">
+                <div class="field has-addons">
+                    {% set __name        = "name" %}
+                    {% set __default     = config["search"][__name]["default"] %}
+                    {% set __placeholder = config["search"][__name]["placeholder"] %}
+                    {% if __default is not none %}
+                        <div class="control"><input class="input" type="text" name="{{ __name }}" placeholder="{{ __placeholder }}" value="{{ __default }}"></div>
+                    {% else %}
+                        <div class="control"><input class="input" type="text" name="{{ __name }}" placeholder="{{ __placeholder }}"></div>
+                    {% endif %}
+                    <div class="control"><button class="button is-base" type="submit" name="method" value="search_name">查询</button></div>
+                    <div class="control"><button class="button"         type="reset"                                   >重置</button></div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- 未查询 -->
+    {% if user_infos is none %}
+
+    <!-- 已查询 -->
+    {% else %}
+
+        <!-- 有结果 -->
+        {% if user_infos|length != 0 %}
+
+            <!-- 下载数据 -->
+            {% if file_infos is not none %}
+                {% for __file_info in file_infos %}
+                    <form action="{{ url_for("view_tool.file") }}" method="POST">
+                        <input name="file_dir"  value="{{ __file_info["file_dir"]  }}" hidden>
+                        <input name="file_name" value="{{ __file_info["file_name"] }}" hidden>
+                        <input name="save_name" value="{{ __file_info["save_name"] }}" hidden>
+                        <div class="field has-addons">
+                            <button class="button is-base" name="method" value="send_file">{{ __file_info["save_name"] }}</button>
+                        </div>
+                    </form>
+                {% endfor %}
+            {% endif %}
+
+            <!-- 显示数据 -->
+            <div class="box">
+
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>查询结果</h2>
+                    </div>
+                </div>
+
+                {% for __user_info in user_infos %}
+
+                    <!-- 人员信息 -->
+                    <div class="box-invis">
+                        <form action="{{ url_for("view_user.info_for_admin") }}" method="POST">
+                            <!-- 隐藏字段 -->
+                            <input name="old_campus_idno" value="{{ __user_info["campus_idno"] }}" hidden>
+                            <input name="old_name" value="{{ __user_info["name"] }}" hidden>
+
+                            <table class="table is-hoverable">
+                                <tbody>
+                                    {% for __field, __field_config in config["user_info"].items() %}
+                                        {% set __header = __field_config["header"] %}
+                                        {% set __fixed  = __field_config["fixed"] %}
+                                        {% set __options  = __field_config["options"] %}
+                                        {% set __value  = __user_info[__field] %}
+                                        {% set __locked  = "锁定" if __field in __user_info["modifykeys"] else "" %}
+
+                                        <tr>
+                                            <!-- 固定字段 -->
+                                            {% if __fixed %}
+                                                <!-- 标题 -->
+                                                <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                                <!-- 内容 -->
+                                                <td style="text-align: center; width: 20rem">{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}</td>
+                                                <!-- 隐藏字段 -->
+                                                <input name="{{ __field }}" value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}' hidden>
+                                            <!-- 可变字段 -->
+                                            {% else %}
+                                                <!-- 标题 -->
+                                                <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                                <!-- 内容 -->
+                                                <td style="text-align: center; width: 20rem">
+                                                    <input class="table-input" type="text" name="{{ __field }}"
+                                                        placeholder='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'
+                                                        value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'
+                                                        list="id_{{ __field }}"
+                                                        style="text-align: center; width: 15rem"
+                                                    >
+                                                        {% if __options %}
+                                                            <datalist id="id_{{ __field }}">
+                                                                {% for __option in __options %}
+                                                                    <option value="{{ __option }}">{{ __option }}</option>
+                                                                {% endfor %}
+                                                            </datalist>
+                                                        {% endif %}
+                                                </td>
+                                            {% endif %}
+                                            <!-- 锁定 -->
+                                            <td style="text-align: center; width: 5rem">{{ __locked }}</td>
+                                        </tr>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <div class="field has-addons">
+                                <div class="control"><button class="button is-base" type="submit" name="method" value="update">更新</button></div>
+                                <div class="control"><button class="button"         type="reset"                              >重置</button></div>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        <!-- 无结果 -->
+        {% else %}
+            <div class="box">
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>无结果</h2>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+    <!-- 额外信息 -->
+    <div class="box-invis">
+        <div class="content">
+            {% for __extra_info in extra_infos %}
+                <h3>{{ __extra_info }}</h3>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+</script>
+{% endblock %}

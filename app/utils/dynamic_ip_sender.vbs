@@ -1,0 +1,1 @@
+Call WScript.CreateObject("WScript.Shell").Run("dynamic_ip_sender.bat", 0, True)

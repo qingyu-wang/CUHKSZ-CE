@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_course.record") }}">
+                <h1>课程记录</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- 查询信息 -->
+    <div class="box">
+
+        <div class="box-invis">
+            <div class="content">
+                <h2>查询信息</h2>
+            </div>
+        </div>
+
+        <div class="box-invis">
+            <form action="{{ url_for("view_course.record") }}" method="POST">
+                <div class="field has-addons">
+                    <div class="field has-addons">
+                        {% for __field, __config in config["search"].items() %}
+                            <div class="control">
+                                {% set __placeholder = __config["placeholder"] %}
+                                {% set __default     = __config["default"] %}
+                                {% set __options     = __config["options"] %}
+                                <input class="input" type="text" name="{{ __field }}"
+                                    placeholder="{{ __placeholder|strftime }}"
+                                    value="{{ __default|strftime if __default }}"
+                                    list="id_{{ __field }}"
+                                >
+                                    {% if __options %}
+                                        <datalist id="id_{{ __field }}">
+                                            {% for __option in __options %}
+                                                <option value="{{ __option }}">{{ __option }}</option>
+                                            {% endfor %}
+                                        </datalist>
+                                    {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="control"><button class="button is-base" type="submit" name="method" value="search">查询</button></div>
+                    <div class="control"><button class="button"         type="reset"                              >重置</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 未查询 -->
+    {% if course_records is none %}
+
+    <!-- 已查询-->
+    {% else %}
+
+        <!-- 有结果 -->
+        {% if course_records|length != 0 %}
+
+            <!-- 下载数据 -->
+            {% if file_infos is not none %}
+                {% for __file_info in file_infos %}
+                    <form action="{{ url_for("view_tool.file") }}" method="POST">
+                        <input name="file_dir"  value="{{ __file_info["file_dir"]  }}" hidden>
+                        <input name="file_name" value="{{ __file_info["file_name"] }}" hidden>
+                        <input name="save_name" value="{{ __file_info["save_name"] }}" hidden>
+                        <div class="field has-addons">
+                            <button class="button is-base" name="method" value="send_file">{{ __file_info["save_name"] }}</button>
+                        </div>
+                    </form>
+                {% endfor %}
+            {% endif %}
+
+            <!-- 显示数据 -->
+            <div class="box">
+
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>查询结果</h2>
+                    </div>
+                </div>
+
+                {% for __course_record in course_records %}
+
+                    <!-- 人员信息 -->
+                    {% set __title = "人员信息" %}
+                    {% set __categ = "user_info" %}
+                    {% set __href = url_for("view_user.info", campus_idno=__course_record["campus_idno"]) %}
+                    <div class="box-invis">
+                        <table class="table is-hoverable">
+                            <tbody>
+                                {% for __field, __config in config[__categ].items() %}
+                                    {% set __header = __config["header"] %}
+                                    {% set __value  = __course_record[__categ][__field] %}
+                                    <tr>
+                                        <!-- 大类 -->
+                                        {% if loop.first %}
+                                            <th style="text-align: center; width: 5rem" rowspan="{{ loop.length }}">{{ __title }}</th>
+                                        {% endif %}
+                                        <!-- 标题 -->
+                                        <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                        <!-- 内容 -->
+                                        <td style="text-align: center; width: 50rem">
+                                            <a href="{{ __href }}" style="color: unset">
+                                                {{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 课程信息 -->
+                    {% set __title = "课程信息" %}
+                    {% set __categ = "course_info" %}
+                    {% set __href = url_for("view_course.info", course_code=__course_record["course_code"]) %}
+                    <div class="box-invis">
+                        <table class="table is-hoverable">
+                            <tbody>
+                                {% for __field, __config in config[__categ].items() %}
+                                    {% set __header = __config["header"] %}
+                                    {% set __value  = __course_record[__categ][__field] %}
+                                    <tr>
+                                        {% if loop.first %}
+                                            <th style="text-align: center; width: 5rem" rowspan="{{ loop.length }}">{{ __title }}</th>
+                                        {% endif %}
+                                        <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                        <td style="text-align: center; width: 50rem">
+                                            <a href="{{ __href }}" style="color: unset">
+                                                {{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 课程记录 -->
+                    {% set __title = "课程记录" %}
+                    {% set __categ = "course_record" %}
+                    {% set __href = url_for("view_course.record", campus_idno=__course_record["campus_idno"], course_code=__course_record["course_code"]) %}
+                    {% if   __course_record["status"] == "已认证" %}
+                        {% set __status = "status-auth" %}
+                    {% elif __course_record["status"] == "已完成" %}
+                        {% set __status = "status-done" %}
+                    {% elif __course_record["status"] == "进行中" %}
+                        {% set __status = "status-doing" %}
+                    {% elif __course_record["status"] == "未开始" %}
+                        {% set __status = "status-undone" %}
+                    {% endif %}
+                    <div class="box-invis">
+                        <table class="table is-hoverable">
+                            <tbody>
+                                {% for __field, __config in config[__categ].items() %}
+                                    {% set __header = __config["header"] %}
+                                    {% set __value  = __course_record[__field] %}
+                                    <tr>
+                                        {% if loop.first %}
+                                        <th style="text-align: center; width: 5rem" rowspan="{{ loop.length }}">{{ __title }}</th>
+                                        {% endif %}
+                                        <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                        <td style="text-align: center; width: 50rem" class="{{ __status }}">
+                                            <a href="{{ __href }}" style="color: unset">
+                                                {{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 活动记录 -->
+                    {% set __title_1 = "活动信息" %}
+                    {% set __title_2 = "活动记录" %}
+                    {% set __categ_1 = "activity_info" %}
+                    {% set __categ_2 = "activity_record" %}
+                    {% if __course_record["activity_records"] %}
+                        <hr>
+                        <div class="box-invis-scroll-xy" style="height: 35rem">
+                            <table class="table is-hoverable fix-header">
+                                <tbody>
+                                    <!-- 大类 -->
+                                    <tr>
+                                        <!-- 活动信息 -->
+                                        <th style="text-align: center" colspan="{{ config[__categ_1]|length }}">{{ __title_1 }}</th>
+                                        <!-- 活动记录 -->
+                                        <th style="text-align: center" colspan="{{ config[__categ_2]|length }}">{{ __title_2 }}</th>
+                                    </tr>
+                                    <!-- 标题 -->
+                                    <tr>
+                                        <!-- 活动信息 -->
+                                        {% for __field, __config in config[__categ_1].items() %}
+                                            {% set __header = __config["header"] %}
+                                            {% set __width  = __config["width"] %}
+                                            <th style="text-align: center; width: {{ __width }}rem">{{ __header }}</th>
+                                        {% endfor %}
+                                        <!-- 活动记录 -->
+                                        {% for __field, __config in config[__categ_2].items() %}
+                                            {% set __header = __config["header"] %}
+                                            {% set __width  = __config["width"] %}
+                                            <th style="text-align: center; width: {{ __width }}rem">{{ __header }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    <!-- 内容 -->
+                                    {% for __activity_record in __course_record["activity_records"] %}
+                                        {% set __href_1 = url_for(
+                                            "view_activity.info", 
+                                            activity_code=__activity_record["activity_code"]
+                                        ) %}
+                                        {% set __href_2 = url_for(
+                                            "view_activity.record",
+                                            activity_code=__activity_record["activity_code"],
+                                            campus_idno=__activity_record["campus_idno"]
+                                        ) %}
+                                        {% if __activity_record["count"] > 0 %}
+                                            {% set __status_2 = "status-done" %}
+                                        {% elif __activity_record["count"] == 0 %}
+                                            {% set __status_2 = "status-undone" %}
+                                        {% else %}
+                                            {% set __status_2 = "status-fail" %}
+                                        {% endif %}
+                                        <tr>
+                                            <!-- 活动信息 -->
+                                            {% for __field, __config in config[__categ_1].items() %}
+                                                {% set __value = __activity_record[__categ_1][__field] %}
+                                                <td style="text-align: center">
+                                                    <a href="{{ __href_1 }}" style="color: unset">
+                                                        {{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}
+                                                    </a>
+                                                </td>
+                                            {% endfor %}
+                                            <!-- 活动记录 -->
+                                            {% for __field, __config in config[__categ_2].items() %}
+                                                {% set __value = __activity_record[__field] %}
+                                                <td style="text-align: center" class="{{ __status_2 }}">
+                                                    <a href="{{ __href_2 }}" style="color: unset">
+                                                        {{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}
+                                                    </a>
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        <!-- 无结果 -->
+        {% else %}
+            <div class="box">
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>无结果</h2>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+</script>
+{% endblock %}

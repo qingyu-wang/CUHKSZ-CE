@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_auth.account") }}">
+                <h1>账户</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- 账户 -->
+    <div class="box">
+
+        <!-- 表单 -->
+        <div class="box-invis">
+            <form action="{{ url_for("view_auth.account") }}" method="POST">
+                <table class="table is-hoverable">
+                    <!-- 隐藏字段 -->
+                    <input name="idno" value="{{ current_user.idno }}" hidden>
+
+                    <tbody>
+                        <!-- 固定字段 -->
+                        <tr>
+                            <th style="text-align: center; width: 10rem">{{ config["auth_headers"]["idno"] }}</th>
+                            <td style="text-align: center; width: 25rem; font-weight: bold">{{ current_user.idno }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width: 10rem">{{ config["auth_headers"]["role"] }}</th>
+                            <td style="text-align: center; width: 25rem; font-weight: bold">{{ current_user.role }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width: 10rem">{{ config["auth_headers"]["username"] }}</th>
+                            <td style="text-align: center; width: 25rem; font-weight: bold">{{ current_user.username }}</td>
+                        </tr>
+                        <!-- 可变字段 -->
+                        <tr>
+                            <th style="text-align: center; width: 10rem">[修改] {{ config["auth_headers"]["username"] }}</th>
+                            <td style="text-align: center; width: 25rem">
+                                <input class="table-input" type="text" style="text-align: center; width: 25rem"
+                                name="username_new" placeholder="请输入 新账号">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width: 10rem" rowspan="2">[修改] {{ config["auth_headers"]["password"] }}</th>
+                            <td style="text-align: center; width: 25rem">
+                                <input class="table-input" type="password" style="text-align: center; width: 25rem"
+                                name="password_new_1" placeholder="请输入 新密码">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; width: 25rem">
+                                <input class="table-input" type="password" style="text-align: center; width: 25rem"
+                                name="password_new_2" placeholder="请再次输入 新密码">
+                            </td>
+                        </tr>
+                        <!-- 固定字段 -->
+                        <tr>
+                            <th style="text-align: center; width: 10rem">创建时间</th>
+                            <td style="text-align: center; width: 25rem; font-weight: bold">{{ current_user.createtime|strftime }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width: 10rem">修改时间</th>
+                            <td style="text-align: center; width: 25rem; font-weight: bold">{{ current_user.modifytime|strftime }}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width: 10rem">修改用户</th>
+                            <td style="text-align: center; width: 25rem; font-weight: bold">{{ current_user.modifyuser }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="field has-addons">
+                    <div class="control"><button class="button" type="submit" name="method" value="update">更新</button></div>
+                    <div class="control"><button class="button" type="reset">重置</button></div>
+                </div>
+            <form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+</script>
+{% endblock %}

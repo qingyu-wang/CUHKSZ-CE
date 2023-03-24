@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <h1>[ 错误 ] {{ error["header"]["message"] }}</h1>
+        </div>
+    </div>
+
+    <!-- 内容 -->
+    <div class="box">
+        <div class="box-invis">
+            <table class="table is-hoverable">
+                <tbody>
+
+                    {% for __key, __val in error["detail"].items() %}
+                        {% if __key == "account" %}
+                            {% for __sub_key in __val %}
+                                <tr>
+                                    <th style="text-align: left">{{ __key.upper() }} {{ __sub_key.upper() }}</th>
+                                    <td style="text-align: left">{{ current_user[__sub_key] }}</th>
+                                </tr>
+                            {% endfor %}
+                        {% elif __key == "headers" %}
+                            {% for __sub_key, __sub_val in __val|dictsort %}
+                            <tr>
+                                <th style="text-align: left">{{ __key.upper() }} {{ __sub_key.upper() }}</th>
+                                <td style="text-align: left">{{ __sub_val }}</th>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <th style="text-align: left">{{ __key.upper() }}</th>
+                                <td style="text-align: left">{{ __val|safe }}</th>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

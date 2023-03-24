@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_activity.info_for_admin") }}">
+                <h1>活动管理</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- 查询信息 -->
+    <div class="box">
+
+        <div class="box-invis">
+            <div class="content">
+                <h2>查询信息</h2>
+            </div>
+        </div>
+
+        <div class="box-invis">
+
+            <form action="{{ url_for("view_activity.info_for_admin") }}" method="POST">
+
+                <!-- 筛选 -->
+                <div class="field has-addons">
+                    {% for __field, __field_config in config["search"].items() if __field not in ["activity_code"] %}
+                        {% set __placeholder = __field_config["placeholder"] %}
+                        {% set __default     = __field_config["default"] %}
+                        {% set __options     = __field_config["options"] %}
+                        <div class="control">
+                            <input class="input" type="text" name="{{ __field }}"
+                                placeholder="{{ __placeholder|strftime }}"
+                                value="{{ __default|strftime if __default }}"
+                                list="id_{{ __field }}"
+                            >
+                                {% if __options %}
+                                    <datalist id="id_{{ __field }}">
+                                        {% for __option in __options %}
+                                            <option value="{{ __option }}">{{ __option }}</option>
+                                        {% endfor %}
+                                    </datalist>
+                                {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="field has-addons">
+                    <div class="control"><button class="button is-base" type="submit" name="method" value="filter">筛选</button></div>
+                    <div class="control"><button class="button"         type="reset"                              >重置</button></div>
+                </div>
+
+                <!-- 查询 -->
+                <div class="field has-addons">
+                    {% for __field, __field_config in config["search"].items() if __field in ["activity_code"] %}
+                        {% set __placeholder  = __field_config["placeholder"] %}
+                        {% set __default      = __field_config["default"] %}
+                        {% set __options      = __field_config["options"] %}
+                        <div class="control">
+                            <input class="input" type="text" name="{{ __field }}"
+                                placeholder="{{ __placeholder|strftime }}"
+                                value="{{ __default|strftime if __default }}"
+                                list="id_{{ __field }}"
+                            >
+                                {% if __options %}
+                                    <datalist id="id_{{ __field }}">
+                                        {% for __option in __options %}
+                                            <option value="{{ __option }}">{{ __option }}</option>
+                                        {% endfor %}
+                                    </datalist>
+                                {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="field has-addons">
+                    <div class="control"><button class="button is-base" type="submit" name="method" value="search">查询</button></div>
+                    <div class="control"><button class="button"         type="reset"                              >重置</button></div>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- 未查询 -->
+    {% if activity_infos is none %}
+
+        <!-- 新增信息 -->
+        <div class="box">
+
+            <div class="box-invis">
+                <div class="content">
+                    <h2>新增信息</h2>
+                </div>
+            </div>
+
+            <!-- 活动信息 -->
+            {% set __title = "活动信息" %}
+            <div class="box-invis">
+                <form action="{{ url_for("view_activity.info_for_admin") }}" method="POST">
+
+                    <!-- 普通字段 -->
+                    <table class="table is-hoverable">
+                        <tbody>
+                            {% for __field, __config in config["activity_info"].items() %}
+                                {% set __header  = __config["header"] %}
+                                {% set __fixed   = __config["fixed"] %}
+                                {% set __default = __config["default"] %}
+                                {% set __options = __config["options"] %}
+                                <tr>
+                                    <!-- 大类 -->
+                                    {% if loop.first %}
+                                        <th style="text-align: center; width: 5rem" rowspan="{{ loop.length }}">{{ __title }}</th>
+                                    {% endif %}
+                                    <!-- 可变字段 -->
+                                    {% if not __fixed %}
+                                        <!-- 标题 -->
+                                        <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                        <!-- 内容 -->
+                                        <td style="text-align: center; width: 50rem">
+                                            <!-- 日期 -->
+                                            {% if __field == "activity_date" %}
+                                                <input class="table-input" type="date" name="{{ __field }}" value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'>
+                                            <!-- 其他 -->
+                                            {% else %}
+                                                <input class="table-input" type="text" name="{{ __field }}"
+                                                    placeholder="{{ __default|strftime }}"
+                                                    value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'
+                                                    list="id_{{ __field }}"
+                                                    style="text-align: center; width: 45rem"
+                                                >
+                                                    {% if __options %}
+                                                        <datalist id="id_{{ __field }}">
+                                                            {% for __option in __options %}
+                                                                <option value="{{ __option }}">{{ __option }}</option>
+                                                            {% endfor %}
+                                                        </datalist>
+                                                    {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="field has-addons">
+                        <div class="control"><button class="button is-base" type="submit" name="method" value="create">新增</button></div>
+                        <div class="control"><button class="button"         type="reset"                              >重置</button></div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    <!-- 已查询 -->
+    {% else %}
+
+        <!-- 有结果 -->
+        {% if activity_infos|length != 0 %}
+
+            <!-- 下载数据 -->
+            {% if file_infos is not none %}
+                {% for __file_info in file_infos %}
+                    <form action="{{ url_for("view_tool.file") }}" method="POST">
+                        <input name="file_dir"  value="{{ __file_info["file_dir"]  }}" hidden>
+                        <input name="file_name" value="{{ __file_info["file_name"] }}" hidden>
+                        <input name="save_name" value="{{ __file_info["save_name"] }}" hidden>
+                        <div class="field has-addons">
+                            <button class="button is-base" name="method" value="send_file">{{ __file_info["save_name"] }}</button>
+                        </div>
+                    </form>
+                {% endfor %}
+            {% endif %}
+
+            <!-- 显示数据 -->
+            <div class="box">
+
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>查询结果</h2>
+                    </div>
+                </div>
+
+                {% for __activity_info in activity_infos %}
+
+                    <!-- 课程信息 -->
+                    {% set __title = "课程信息" %}
+                    {% set __categ = "course_info" %}
+                    {% set __href = url_for("view_course.info", course_code=__activity_info["course_code"]) %}
+                    <div class="box-invis">
+                        <table class="table is-hoverable">
+                            <tbody>
+                                {% for __field, __config in config[__categ].items() %}
+                                    {% set __header = __config["header"] %}
+                                    {% set __value  = __activity_info[__categ][__field] %}
+                                    <tr>
+                                        {% if loop.first %}
+                                            <th style="text-align: center; width: 5rem" rowspan="{{ loop.length }}">{{ __title }}</th>
+                                        {% endif %}
+                                        <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                        <td style="text-align: center; width: 50rem">
+                                            <a href="{{ __href }}" style="color: unset">
+                                                {{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 活动信息 -->
+                    {% set __title = "活动信息" %}
+                    <div class="box-invis">
+                        <form action="{{ url_for("view_activity.info_for_admin") }}" method="POST">
+
+                            <!-- 隐藏字段 -->
+                            <input name="old_activity_code" value="{{ __activity_info["activity_code"] }}" hidden>
+
+                            <!-- 普通字段 -->
+                            <table class="table is-hoverable">
+                                <tbody>
+                                    {% for __field, __config in config["activity_info"].items() %}
+                                        {% set __header  = __config["header"] %}
+                                        {% set __fixed   = __config["fixed"] %}
+                                        {% set __default = __config["default"] %}
+                                        {% set __options = __config["options"] %}
+                                        {% set __value   = __activity_info[__field] %}
+                                        <tr>
+                                            <!-- 大类 -->
+                                            {% if loop.first %}
+                                                <th style="text-align: center; width: 5rem" rowspan="{{ loop.length }}">{{ __title }}</th>
+                                            {% endif %}
+                                            <!-- 固定字段 -->
+                                            {% if __fixed %}
+                                                <!-- 标题 -->
+                                                <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                                <!-- 内容 -->
+                                                <td style="text-align: center; width: 50rem">{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}</td>
+                                                <!-- 隐藏字段 -->
+                                                <input name="{{ __field }}" value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}' hidden>
+                                            <!-- 可变字段 -->
+                                            {% else %}
+                                                <!-- 标题 -->
+                                                <th style="text-align: center; width: 5rem">{{ __header }}</th>
+                                                <!-- 内容 -->
+                                                <td style="text-align: center; width: 50rem">
+                                                    <!-- 日期 -->
+                                                    {% if __field == "activity_date" %}
+                                                        <input class="table-input" type="date" name="{{ __field }}" value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'>
+                                                    <!-- 其他 -->
+                                                    {% else %}
+                                                        <input class="table-input" type="text" name="{{ __field }}"
+                                                            placeholder='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'
+                                                            value='{{ __value|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __value is not none }}'
+                                                            list="id_{{ __field }}"
+                                                            style="text-align: center; width: 45rem"
+                                                        >
+                                                            {% if __options %}
+                                                                <datalist id="id_{{ __field }}">
+                                                                    {% for __option in __options %}
+                                                                        <option value="{{ __option }}">{{ __option }}</option>
+                                                                    {% endfor %}
+                                                                </datalist>
+                                                            {% endif %}
+                                                    {% endif %}
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <div class="field has-addons">
+                                <div class="control"><button class="button is-base" type="submit" name="method" value="update">更新</button></div>
+                                <div class="control"><button class="button"         type="reset"                              >重置</button></div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        <!-- 无结果 -->
+        {% else %}
+            <div class="box">
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>无结果</h2>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+</script>
+{% endblock %}

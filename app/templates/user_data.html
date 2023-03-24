@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_user.data") }}">
+                <h1>人员数据</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- 查询数据 -->
+    <div class="box">
+
+        <div class="box-invis">
+            <div class="content">
+                <h2>查询数据</h2>
+            </div>
+        </div>
+
+        <div class="box-invis">
+
+            <form action="{{ url_for("view_user.data") }}" method="POST">
+
+                {% for __field, __field_config in config["search"].items() %}
+                    {% set __placeholder = __field_config["placeholder"] %}
+                    {% set __default     = __field_config["default"] %}
+                    {% set __options     = __field_config["options"] %}
+                    {% if loop.index % 4 == 1 %}
+                        <div class="field has-addons">
+                    {% endif %}
+                        <div class="control">
+                            <input class="input" type="text" name="{{ __field }}"
+                                placeholder="{{ __placeholder|strftime }}"
+                                value="{{ __default|strftime if __default }}"
+                                list="id_{{ __field }}"
+                            >
+                                {% if __options %}
+                                    <datalist id="id_{{ __field }}">
+                                        {% for __option in __options %}
+                                            <option value="{{ __option }}">{{ __option }}</option>
+                                        {% endfor %}
+                                    </datalist>
+                                {% endif %}
+                        </div>
+                    {% if loop.index % 4 == 0 or loop.last %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="field has-addons">
+                    <div class="control"><button class="button is-base" type="submit" name="method" value="search">查询</button></div>
+                    <div class="control"><button class="button"         type="reset"                value="search_reset">重置</button></div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- 更新数据 -->
+    <div class="box">
+
+        <div class="box-invis">
+            <div class="content">
+                <h2>更新数据</h2>
+            </div>
+        </div>
+
+        {% for __method,__config in config["update"].items() %}
+            {% set __file_name   = __config["file_name"] %}
+            {% set __placeholder = __config["placeholder"] %}
+            {% set __reset_value = "update_reset_"+loop.index|string %}
+            {% set __upload_id   = "id_upload_file_"+loop.index|string %}
+            <div class="box-invis">
+                <form action="{{ url_for("view_user.data") }}" method="POST" enctype="multipart/form-data">
+
+                    <div class="field has-addons">
+                        <!-- upload_file -->
+                        <div class="file has-name" id="{{ __upload_id }}">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="{{ __file_name }}" accept=".xlsx">
+                                <span class="file-cta"  style="width: 5rem">上传</span>
+                                <span class="file-name" style="width: 15rem; max-width: 15rem; opacity: 0.5">{{ __placeholder }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field has-addons">
+                        <div class="control"><button class="button is-base" type="submit" name="method" value="{{ __method }}"     >提交</button></div>
+                        <div class="control"><button class="button"         type="reset"                value="{{ __reset_value }}">重置</button></div>
+                    </div>
+
+                </form>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- 未查询 -->
+    {% if user_infos is none %}
+
+    <!-- 已查询 -->
+    {% else %}
+
+        <!-- 有结果 -->
+        {% if user_infos|length != 0 %}
+
+            <!-- 下载数据 -->
+            {% if file_infos is not none %}
+                {% for __file_info in file_infos %}
+                    <form action="{{ url_for("view_tool.file") }}" method="POST">
+                        <input name="file_dir"  value="{{ __file_info["file_dir"]  }}" hidden>
+                        <input name="file_name" value="{{ __file_info["file_name"] }}" hidden>
+                        <input name="save_name" value="{{ __file_info["save_name"] }}" hidden>
+                        <div class="field has-addons">
+                            <button class="button is-base" name="method" value="send_file">{{ __file_info["save_name"] }}</button>
+                        </div>
+                    </form>
+                {% endfor %}
+            {% endif %}
+
+            <!-- 显示数据 -->
+            <div class="box">
+
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>查询结果 ({{ user_infos|length }})</h2>
+                        <h3>仅显示前 {{ config["display_limit"] }} 条人员信息</h3>
+                    </div>
+                </div>
+
+                <div class="box-invis">
+                    <table class="table">
+                        <tbody>
+                        {% for __user_info in user_infos[:config["display_limit"]] %}
+                            {% if loop.first %}
+                                <tr>
+                            {% elif loop.index % 5 == 1 %}
+                                </tr>
+                                <tr>
+                            {% endif %}
+                                    <td style="text-align: center; width: 15rem">
+                                        <a href="{{ url_for("view_user.info_for_admin", campus_idno=__user_info["campus_idno"]) }}" class="text-link", style="font-size: 0.75rem">
+                                            {{ __user_info["campus_idno"] }}<br>{{ __user_info["name"] }}</a>
+                                    </td>
+                            {% if loop.last %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        <!-- 无结果 -->
+        {% else %}
+            <div class="box">
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>无结果</h2>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+
+{% for __method, __config in config["update"].items() %}
+    {% set __placeholder  = __config["placeholder"] %}
+    {% set __reset_value  = "update_reset_"+loop.index|string %}
+    {% set __upload_id    = "id_upload_file_"+loop.index|string %}
+    // JS 变量
+    {% set __upload_file  = "uploadFile"+loop.index|string %}
+    {% set __upload_name  = "uploadFileName"+loop.index|string %}
+    {% set __reset_button = "resetButton"+loop.index|string %}
+
+    // 上传文件后，显示文件名
+    const {{ __upload_file }} = document.querySelector("#{{ __upload_id }} input[type=file]");
+    {{ __upload_file }}.onchange = () => {
+        if ({{ __upload_file }}.files.length > 0) {
+            // 显示上传文件名
+            const {{ __upload_name }} = document.querySelector("#{{ __upload_id }} .file-name");
+            {{ __upload_name }}.textContent = {{ __upload_file }}.files[0].name;
+            {{ __upload_name }}.style.opacity = 1;
+        }
+    }
+
+    // 重置文件后，还原文件名
+    const {{ __reset_button }} = document.querySelector("form button[value={{ __reset_value }}]");
+    {{ __reset_button }}.onclick = () => {
+        // 重置上传文件名
+        const uploadFileName1 = document.querySelector("#{{ __upload_id }} .file-name");
+        uploadFileName1.textContent = "{{ __placeholder }}";
+        uploadFileName1.style.opacity = 0.5;
+    }
+{% endfor %}
+</script>
+{% endblock %}
