@@ -1,8 +1,10 @@
 # CUHKSZ-CE Activity Management System
 
 <p align="center">
-  <img src="./docs/images/screenshot-index.png" width="150">
+  <img src="./docs/images/screenshot-index.png" width="600">
 </p>
+
+![screenshot-index]("./docs/images/screenshot-index.png")
 
 - [Environment](#environment)
 - [Service](#service)
