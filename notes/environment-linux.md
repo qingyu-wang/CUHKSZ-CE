@@ -38,21 +38,12 @@ sudo systemctl restart supervisor
 
 # /etc/supervisor/conf.d/*.conf
 
-cp \
-/home/hss001/HSS/repo/CUHKSZ-CE/notes/supervisor-linux.conf \
-/etc/supervisor/conf.d/supervisor-CUHKSZ-CE.conf
-
 vi /etc/supervisor/conf.d/supervisor-CUHKSZ-CE.conf
 
 sudo supervisorctl start   CUHKSZ-CE
 sudo supervisorctl restart CUHKSZ-CE
 sudo supervisorctl status  CUHKSZ-CE
 sudo supervisorctl stop    CUHKSZ-CE
-
-sudo supervisorctl update CUHKSZ-CE & sudo supervisorctl restart CUHKSZ-CE
-
-tail -n 100 /home/hss001/HSS/repo/CUHKSZ-CE/log/stdout.log
-tail -n 100 /home/hss001/HSS/repo/CUHKSZ-CE/log/stderr.log
 ```
 
 ## Gunicorn
@@ -60,4 +51,19 @@ tail -n 100 /home/hss001/HSS/repo/CUHKSZ-CE/log/stderr.log
 pip install gunicorn
 
 gunicorn -w 4 -b 0.0.0.0 "app:app"
+```
+
+
+## Nginx
+```shell
+sudo apt install nginx
+
+sudo systemctl status  nginx
+sudo systemctl start   nginx
+sudo systemctl stop    nginx
+sudo systemctl restart nginx
+
+# /etc/nginx/sites-enabled/default
+
+sudo vi /etc/nginx/sites-enabled/default
 ```

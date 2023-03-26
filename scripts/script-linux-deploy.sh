@@ -1,11 +1,5 @@
-## 正式服务 WSGI (UNIX)
+# Service Linux Debug
+# http://127.0.0.1:5000
 
-### `gunicorn`
-### `uwsgi`
-### `gevent`
-
-## 负载均衡
-
-### `nginx`
-# http://127.0.0.1:8000/CE/
-# http://127.0.0.1:8000/CE-debug/
+# gunicorn 
+gunicorn -w 4 -b 0.0.0.0:5000 "app:app"

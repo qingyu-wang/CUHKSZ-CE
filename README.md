@@ -51,7 +51,12 @@
 
 
 
-## Problem
+## External Access
+
+### Static IP Access
+
+1. **config domain**: bind local IP address (with 80 port) in DNS setting
+2. **config Nginx**: set `proxy_pass` to define the redirect location according to the `server_name`
 
 ### Dynamic IP Access
 
