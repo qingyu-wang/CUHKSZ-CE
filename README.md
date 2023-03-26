@@ -4,7 +4,7 @@
   <img src="./docs/images/screenshot-index.png" width="600">
 </p>
 
-![screenshot-index]("./docs/images/screenshot-index.png")
+![screenshot-index](./docs/images/screenshot-index.png)
 
 - [Environment](#environment)
 - [Service](#service)
