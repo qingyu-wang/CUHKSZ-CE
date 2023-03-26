@@ -1,7 +1,7 @@
 # CUHKSZ-CE Activity Management System
 
 <p align="center">
-  <img src="./docs/images/screenshot-index.png" width="600">
+  <img src="./docs/images/screenshot-index.png" width="80%">
 </p>
 
 ![screenshot-index](./docs/images/screenshot-index.png)
