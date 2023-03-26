@@ -2,7 +2,7 @@
 
 # Custom File
 DEPLOY.md
-notes/server.md
+docs/server.md
 app/utils/utils_config.py
 
 # Custom Directory

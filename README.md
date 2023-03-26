@@ -1,5 +1,9 @@
 # CUHKSZ-CE Activity Management System
 
+<p align="center">
+  <img src="./docs/images/screenshot-index.png" width="150">
+</p>
+
 - [Environment](#environment)
 - [Service](#service)
 - [Tool](#Tool)
