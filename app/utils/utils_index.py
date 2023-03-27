@@ -108,7 +108,11 @@ def get_nav():
                 "权限管理": {
                     "url": url_for("view_auth.role"),
                     "auth": [UserRole.admin]
-                }
+                },
+                "数据结构": {
+                    "url": url_for("view_tool.data_structure"),
+                    "auth": [UserRole.admin]
+                },
             }
         }
     }

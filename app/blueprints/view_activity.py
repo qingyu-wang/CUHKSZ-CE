@@ -72,6 +72,10 @@ def info():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         activity_code = request.args.get("activity_code", "").strip()
         params["config"]["search"]["activity_code"]["default"] = activity_code
         if activity_code:
@@ -90,6 +94,10 @@ def info():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=filter
         if method == "filter":
@@ -203,6 +211,10 @@ def record():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         activity_code = request.args.get("activity_code", "").strip()
         campus_idno   = request.args.get("campus_idno", "").strip()
         params["config"]["search"]["activity_code"]["default"] = activity_code
@@ -223,6 +235,10 @@ def record():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search
         if method == "search":
@@ -305,6 +321,10 @@ def info_for_admin():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         activity_code = request.args.get("activity_code", "").strip()
         params["config"]["search"]["activity_code"]["default"] = activity_code
         if activity_code:
@@ -323,6 +343,10 @@ def info_for_admin():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=filter
         if method == "filter":
@@ -534,6 +558,10 @@ def data():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         activity_code = request.args.get("activity_code", "").strip()
         params["config"]["search"]["activity_code"]["default"] = activity_code
         if activity_code:
@@ -563,6 +591,10 @@ def data():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=filter
         if method == "filter":

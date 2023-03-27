@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_tool.data_structure") }}">
+                <h1>数据结构</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="box">
+
+        {% for __image_info in image_infos %}
+            {% set __name = __image_info["name"] %}
+            {% set __path = __image_info["path"] %}
+            {% set __width = __image_info["width"] %}
+            <div class="box-invis">
+                <div class="content">
+                    <h2>{{ __name }}</h2>
+                </div>
+            </div>
+
+            <div class="box-invis">
+                <img
+                    src="/static/image/{{ __path }}"
+                    style="display: block; margin-left: auto; margin-right: auto; object-fit: contain; width: {{ __width }}px"
+                >
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,7 +1,6 @@
 from flask import Blueprint
 from flask import render_template, request
 
-
 from ..utils.utils_error import render_error_template
 from ..utils.utils_index import get_nav
 

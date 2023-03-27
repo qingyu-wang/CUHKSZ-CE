@@ -121,6 +121,10 @@ def info():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         campus_idno = request.args.get("campus_idno", "").strip()
         name        = request.args.get("name", "").strip()
         if campus_idno:
@@ -144,6 +148,10 @@ def info():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search_idno
         if method == "search_idno":
@@ -251,15 +259,29 @@ def info_for_admin():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         campus_idno = request.args.get("campus_idno", "").strip()
         name = request.args.get("name", "").strip()
         if campus_idno:
+            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+                current_user.idno, current_user.username, current_user.role,
+                request.method, request.endpoint, method,
+                campus_idno
+            ))
             params["config"]["search"]["campus_idno"]["default"] = campus_idno
             result_1 = user_utils.get_info_by_campus_idno(campus_idno=campus_idno)
             params["msgs"].extend(result_1["msgs"])
             if result_1["user_info"]:
                 params["user_infos"] = [result_1["user_info"]]
         elif name:
+            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+                current_user.idno, current_user.username, current_user.role,
+                request.method, request.endpoint, method,
+                name
+            ))
             params["config"]["search"]["name"]["default"] = name
             result_1 = user_utils.get_infos_by_name(name=name)
             params["msgs"].extend(result_1["msgs"])
@@ -274,10 +296,19 @@ def info_for_admin():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search_idno
         if method == "search_idno":
             campus_idno = request.form["campus_idno"].strip()
+            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+                current_user.idno, current_user.username, current_user.role,
+                request.method, request.endpoint, method,
+                campus_idno
+            ))
             if campus_idno:
                 params["config"]["search"]["campus_idno"]["default"] = campus_idno
                 result_1 = user_utils.get_info_by_campus_idno(campus_idno=campus_idno)
@@ -294,6 +325,11 @@ def info_for_admin():
         # POST method=search_name
         if method == "search_name":
             name = request.form["name"].strip()
+            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+                current_user.idno, current_user.username, current_user.role,
+                request.method, request.endpoint, method,
+                name
+            ))
             if name:
                 params["config"]["search"]["name"]["default"] = name
                 result = user_utils.get_infos_by_name(name=name)
@@ -388,11 +424,19 @@ def data():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         return render_template(template_path, **params)
 
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search
         if method == "search":

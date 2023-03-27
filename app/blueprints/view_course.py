@@ -72,6 +72,10 @@ def info():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         course_code = request.args.get("course_code", "").strip()
         field_filters = {
             "activity_type":    request.args.get("activity_type", "").strip(),
@@ -107,6 +111,10 @@ def info():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search
         if method == "search":
@@ -237,6 +245,10 @@ def record():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         course_code = request.args.get("course_code", "").strip()
         campus_idno = request.args.get("campus_idno", "").strip()
         params["config"]["search"]["course_code"]["default"] = course_code
@@ -265,6 +277,10 @@ def record():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search
         if method == "search":
@@ -338,6 +354,10 @@ def info_for_admin():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         course_code = request.args.get("course_code", "").strip()
         params["config"]["search"]["course_code"]["default"] = course_code
         if course_code:
@@ -356,6 +376,10 @@ def info_for_admin():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search
         if method == "search":
@@ -534,6 +558,10 @@ def data():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         course_code = request.args.get("course_code", "").strip()
         params["config"]["search"]["course_code"]["default"] = course_code
         if course_code:
@@ -563,6 +591,10 @@ def data():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search
         if method == "search":

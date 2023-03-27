@@ -13,7 +13,6 @@ class FileUtils(object):
 
         self.temp_dir      = os.path.join(data_dir,   "temp")
         self.mongodb_dir   = os.path.join(data_dir,   "mongodb")
-        self.template_dir  = os.path.join(static_dir, "template")
 
         if not os.path.isdir(data_dir):
             os.mkdir(data_dir)

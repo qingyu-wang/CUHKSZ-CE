@@ -124,11 +124,19 @@ def account():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         return render_template(template_path, **params)
 
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=update
         if method == "update":
@@ -198,12 +206,20 @@ def role():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         params["auth_role_infos"] = auth_utils.get_role_infos()
         return render_template(template_path, **params)
 
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=update
         if method == "update":

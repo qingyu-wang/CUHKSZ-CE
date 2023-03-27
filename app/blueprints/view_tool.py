@@ -10,7 +10,6 @@ from ..utils.utils_auth import UserRole
 from ..utils.utils_error import render_error_template
 from ..utils.utils_file import file_utils
 from ..utils.utils_index import get_nav
-from ..utils.utils_mongo import mongo
 from ..utils.utils_tool_dakaji import search_dakaji, preprocess_dakaji
 from ..utils.utils_tool_tencent import preprocess_tencent
 from ..utils.utils_tool_wenjuanxing_1 import preprocess_wenjuanxing_1
@@ -101,11 +100,19 @@ def wenjuanxing():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         return render_template(template_path, **params)
 
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=upload_wenjuanxing_1 or method=upload_wenjuanxing_2
         if method in ["upload_wenjuanxing_1", "upload_wenjuanxing_2"]:
@@ -166,11 +173,19 @@ def zoom():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         return render_template(template_path, **params)
 
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=upload_zoom
         if method == "upload_zoom":
@@ -226,11 +241,19 @@ def tencent():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
         return render_template(template_path, **params)
 
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=upload_tencent
         if method == "upload_tencent":
@@ -294,9 +317,12 @@ def dakaji():
 
     # GET
     if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
 
         # GET method=search_data
-        print(request.args)
         if request.args.get("method") == "search_data":
             search_name = request.args["search_name"]
             if search_name:
@@ -317,6 +343,10 @@ def dakaji():
     # POST
     if request.method == "POST":
         method = request.form["method"]
+        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+            current_user.idno, current_user.username, current_user.role, 
+            request.method, request.endpoint, method
+        ))
 
         # POST method=search_info
         if method == "search_info":
@@ -342,5 +372,52 @@ def dakaji():
                 if params["msgs"][-1]["type"] == "success":
                     params["file_infos"] = [{"file_dir": file_dir, "file_name": file_name, "save_name": save_name}]
             return render_template(template_path, **params)
+
+    return render_error_template(message="系统错误")
+
+
+# 数据结构
+# http://127.0.0.1:5000/tool/data_structure/
+@bp_view_tool.route("/data_structure/", methods=["GET"])
+@login_required
+def data_structure():
+
+    # Verify
+    if current_user.role not in [UserRole.admin]:
+        return render_error_template(message="您没有权限访问")
+
+    # Template
+    template_path = "tool_data_structure.html"
+
+    # Params
+    params = {
+        "nav": get_nav(),
+        "msgs": [],
+        "image_infos": [
+            {
+                "name": "数据库关系",
+                "path": "data structure 1 database link.png",
+                "width": 564 # width 1125
+            },
+            {
+                "name": "更新 活动进度 (课程记录)",
+                "path": "data structure 2 auto update course_record-activity_done.png",
+                "width": 622 # width 1243
+            },
+            {
+                "name": "更新 状态 (课程记录)",
+                "path": "data structure 3 auto update course_record-status.png",
+                "width": 712 # width 1425
+            },
+        ],
+    }
+
+    # GET
+    if request.method == "GET":
+        print("[INFO] %s/%s (%s) [%s] => %s" % (
+            current_user.idno, current_user.username, current_user.role,
+            request.method, request.endpoint
+        ))
+        return render_template(template_path, **params)
 
     return render_error_template(message="系统错误")
