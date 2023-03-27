@@ -38,7 +38,7 @@ class ActivityRecordUtils(object):
         __new_doc = {
             "activity_code": "/",
             "campus_idno":   "/",
-            "count":         "/",
+            "count":         0,
 
             "signup":        "/",
             "signin_record": "/",
@@ -252,6 +252,9 @@ class ActivityRecordUtils(object):
                     # 校验字段 所有字段 默认值
                     if not value:
                         value = default_doc[field]
+                    # 校验字段 特定字段 数量
+                    if field == "count":
+                        value = int(value)
                     # 校验字段 限制字段
                     if field in activity_record_field_limits and value not in activity_record_field_limits[field]:
                         result["msgs"].append({
