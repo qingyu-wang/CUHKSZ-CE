@@ -53,6 +53,10 @@ def preprocess_zoom(old_wb_path, new_wb_path):
             # 签到记录
             time_signin  = row[2]
             time_signout = row[3]
+            if isinstance(time_signin, str):
+                time_signin  = datetime.datetime.strptime(time_signin,  "%m/%d/%Y %I:%M:%S %p")
+            if isinstance(time_signout, str):
+                time_signout = datetime.datetime.strptime(time_signout, "%m/%d/%Y %I:%M:%S %p")
             assert isinstance(time_signin,  datetime.datetime)
             assert isinstance(time_signout, datetime.datetime)
             # 持续时间
@@ -149,10 +153,10 @@ def preprocess_zoom(old_wb_path, new_wb_path):
             for col, key in enumerate(headers, start=1):
                 cell = new_ws.cell(row=row, column=col)
                 if key == "签到记录":
-                    cell.value = "\n".join([j.strftime("%Y-%m-%d %H:%M:%S") for j in info[key]])
+                    cell.value = "\n".join(sorted([j.strftime("%Y-%m-%d %H:%M:%S") for j in info[key]]))
                     cell.number_format = numbers.FORMAT_TEXT
                 elif key == "签退记录":
-                    cell.value = "\n".join([j.strftime("%Y-%m-%d %H:%M:%S") for j in info[key]])
+                    cell.value = "\n".join(sorted([j.strftime("%Y-%m-%d %H:%M:%S") for j in info[key]]))
                     cell.number_format = numbers.FORMAT_TEXT
                 elif key == "持续时间 (秒)":
                     cell.value = info["持续时间"].total_seconds()
