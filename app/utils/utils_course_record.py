@@ -469,6 +469,9 @@ class CourseRecordUtils(object):
                 default_doc = self.new_doc
                 for idx, value in enumerate(row_value):
                     header = row_header[idx]
+                    # 转换格式
+                    if isinstance(value, (int, float)):
+                        value = str(value)
                     # 提取字段 删除
                     if header == "删除":
                         if str(value).upper() in ["TRUE", "T"]:
@@ -497,7 +500,9 @@ class CourseRecordUtils(object):
                     if field in course_record_field_limits and value not in course_record_field_limits[field]:
                         result["msgs"].append({
                             "type": "error",
-                            "text": "校验失败<br>值不可选 [ %s=%s ]" % (course_record_field_headers[field], value)
+                            "text": "校验失败<br>值不可选 [ %s=%s ]" % (
+                                course_record_field_headers[field], value
+                            )
                         })
                         continue
                     # 记录字段
@@ -508,7 +513,9 @@ class CourseRecordUtils(object):
                     result["counts"]["error"] += 1
                     result["msgs"].append({
                         "type": "error",
-                        "text": "校验失败<br>值不存在 [ %s ]" % course_record_field_headers["course_code"]
+                        "text": "校验失败<br>值不存在 [ %s=%s ]" % (
+                            course_record_field_headers["course_code"], course_code
+                        )
                     })
                     continue
                 # 校验字段 定位字段 校园卡号
@@ -516,7 +523,9 @@ class CourseRecordUtils(object):
                     result["counts"]["error"] += 1
                     result["msgs"].append({
                         "type": "error",
-                        "text": "校验失败<br>值不存在 [ %s ]" % course_record_field_headers["campus_idno"]
+                        "text": "校验失败<br>值不存在 [ %s=%s ]" % (
+                            course_record_field_headers["campus_idno"], campus_idno
+                        )
                     })
                     continue
 

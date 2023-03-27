@@ -228,6 +228,9 @@ class ActivityRecordUtils(object):
                 default_doc = self.new_doc
                 for idx, value in enumerate(row_value):
                     header = row_header[idx]
+                    # 转换格式
+                    if isinstance(value, (int, float)):
+                        value = str(value)
                     # 提取字段 删除
                     if header == "删除":
                         if str(value).upper() in ["TRUE", "T"]:
@@ -270,7 +273,9 @@ class ActivityRecordUtils(object):
                     result["counts"]["error"] += 1
                     result["msgs"].append({
                         "type": "error",
-                        "text": "校验失败<br>值不存在 [ %s ]" % activity_record_field_headers["activity_code"]
+                        "text": "校验失败<br>值不存在 [ %s=%s ]" % (
+                            activity_record_field_headers["activity_code"], activity_code
+                        )
                     })
                     continue
                 # 校验字段 定位字段 校园卡号
@@ -278,7 +283,9 @@ class ActivityRecordUtils(object):
                     result["counts"]["error"] += 1
                     result["msgs"].append({
                         "type": "error",
-                        "text": "校验失败<br>值不存在 [ %s ]" % activity_record_field_headers["campus_idno"]
+                        "text": "校验失败<br>值不存在 [ %s=%s ]" % (
+                            activity_record_field_headers["campus_idno"], campus_idno
+                        )
                     })
                     continue
 
@@ -331,7 +338,7 @@ class ActivityRecordUtils(object):
                         )
                         if update_result.modified_count == 1:
                             result["counts"]["update"] += 1
-                            
+
                             # 同步更新
                             if "count" in update_info:
                                 # 同步更新 数量 => 课程记录
