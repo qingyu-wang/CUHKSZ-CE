@@ -100,7 +100,8 @@ def wenjuanxing():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -109,7 +110,8 @@ def wenjuanxing():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -173,7 +175,8 @@ def zoom():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -182,7 +185,8 @@ def zoom():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -241,7 +245,8 @@ def tencent():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -250,7 +255,8 @@ def tencent():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -317,7 +323,8 @@ def dakaji():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -343,7 +350,8 @@ def dakaji():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -414,7 +422,8 @@ def data_structure():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))

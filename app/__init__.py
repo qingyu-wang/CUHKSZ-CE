@@ -68,10 +68,14 @@ def create_app():
         try:
             auth_user = mongo.coll_auth_info.find_one({"idno": auth_idno})
         except:
-            print("[ERROR] load_user failed [ auth_idno=%s ]" % auth_idno)
+            print("[ERROR] %s load_user failed [ auth_idno=%s ]" % (
+                datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), auth_idno
+            ))
             auth_idno = "guest_001"
             auth_user = mongo.coll_auth_info.find_one({"idno": auth_idno})
-        print("[INFO] load_user [ auth_idno=%s ]" % auth_idno)
+        print("[INFO] %s load_user [ auth_idno=%s ]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"), auth_idno
+        ))
         flask_user = FlaskUser(auth_user=auth_user)
         return flask_user
 

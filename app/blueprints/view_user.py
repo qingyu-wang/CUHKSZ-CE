@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint
 from flask import render_template, request
 from flask_login import login_required, current_user
@@ -121,7 +123,8 @@ def info():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -148,7 +151,8 @@ def info():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint, method
         ))
@@ -259,14 +263,16 @@ def info_for_admin():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
         campus_idno = request.args.get("campus_idno", "").strip()
         name = request.args.get("name", "").strip()
         if campus_idno:
-            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+            print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+                datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 current_user.idno, current_user.username, current_user.role,
                 request.method, request.endpoint, method,
                 campus_idno
@@ -277,7 +283,8 @@ def info_for_admin():
             if result_1["user_info"]:
                 params["user_infos"] = [result_1["user_info"]]
         elif name:
-            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+            print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+                datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 current_user.idno, current_user.username, current_user.role,
                 request.method, request.endpoint, method,
                 name
@@ -296,7 +303,8 @@ def info_for_admin():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint, method
         ))
@@ -304,7 +312,8 @@ def info_for_admin():
         # POST method=search_idno
         if method == "search_idno":
             campus_idno = request.form["campus_idno"].strip()
-            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+            print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+                datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 current_user.idno, current_user.username, current_user.role,
                 request.method, request.endpoint, method,
                 campus_idno
@@ -325,7 +334,8 @@ def info_for_admin():
         # POST method=search_name
         if method == "search_name":
             name = request.form["name"].strip()
-            print("[INFO] %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+            print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+                datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 current_user.idno, current_user.username, current_user.role,
                 request.method, request.endpoint, method,
                 name
@@ -424,7 +434,8 @@ def data():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -433,7 +444,8 @@ def data():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint, method
         ))

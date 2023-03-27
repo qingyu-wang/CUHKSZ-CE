@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint
 from flask import render_template, request
 from flask_login import login_required, current_user
@@ -72,7 +74,8 @@ def info():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -94,7 +97,8 @@ def info():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -211,7 +215,8 @@ def record():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -235,7 +240,8 @@ def record():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -321,7 +327,8 @@ def info_for_admin():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -343,7 +350,8 @@ def info_for_admin():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -558,7 +566,8 @@ def data():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -591,7 +600,8 @@ def data():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))

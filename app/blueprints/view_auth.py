@@ -124,7 +124,8 @@ def account():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -133,7 +134,8 @@ def account():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
@@ -206,7 +208,8 @@ def role():
 
     # GET
     if request.method == "GET":
-        print("[INFO] %s/%s (%s) [%s] => %s" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role,
             request.method, request.endpoint
         ))
@@ -216,7 +219,8 @@ def role():
     # POST
     if request.method == "POST":
         method = request.form["method"]
-        print("[INFO] %s/%s (%s) [%s] => %s [method=%s]" % (
+        print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s]" % (
+            datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
             current_user.idno, current_user.username, current_user.role, 
             request.method, request.endpoint, method
         ))
