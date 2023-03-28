@@ -47,7 +47,7 @@ def create_app():
         id="clean_dir",
         minutes=5,
         misfire_grace_time=100,
-        # next_run_time=datetime.datetime.now() # run immediately
+        next_run_time=datetime.datetime.now() # run immediately
     )
     def job_clean_dir():
         print("[INFO] APSchedulerD [%s] start..." % "clean_dir")
