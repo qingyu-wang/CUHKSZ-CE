@@ -58,7 +58,6 @@ def overview():
         params["msgs"].extend(result["msgs"])
         if result["overview_infos"]:
             params["overview_infos"] = result["overview_infos"]
-        print(params["overview_infos"])
         return render_template(template_path, **params)
 
     return render_error_template(message="系统错误")
