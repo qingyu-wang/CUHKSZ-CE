@@ -70,7 +70,6 @@ def overview():
 @login_required
 def college():
 
-
     # Verify
     if current_user.role not in [UserRole.staff, UserRole.admin]:
         return render_error_template(message="您没有权限访问")
@@ -106,9 +105,10 @@ def college():
         # 查询
         result = board_utils.get_college_infos()
         params["msgs"].extend(result["msgs"])
+        if result["activity_types"]:
+            params["config"]["3rd_categ_options"] += result["activity_types"]
         if result["college_infos"]:
             params["college_infos"] = result["college_infos"]
-        print(params["college_infos"])
         return render_template(template_path, **params)
 
     return render_error_template(message="系统错误")

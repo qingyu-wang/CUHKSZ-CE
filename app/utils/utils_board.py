@@ -90,6 +90,7 @@ class BoardUtils(object):
     def get_college_infos(self):
         result = {
             "msgs": [],
+            "activity_rules": None,
             "college_infos": None,
         }
         course_code = "CEC1020"
@@ -103,6 +104,11 @@ class BoardUtils(object):
             })
             return result
         activity_rules = course_info["activity_rules"]
+        activity_types = ["已完成书院活动"] + sorted(list({activity_type 
+            for activity_rule in activity_rules 
+            for activity_type in activity_rule if activity_type
+        }))
+        result["activity_types"] = activity_types
         # 聚合参数
         group_config = {
             "_id": {
@@ -118,6 +124,14 @@ class BoardUtils(object):
                 group_config[acitivty_type] = {"$sum": {"$cond": [
                     {"$gte": ["$activity_done.%s" % acitivty_type, count]}, 1, 0
                 ]}}
+        group_config["已完成书院活动"] = {"$sum": {"$cond": [
+            {"$or" : [
+                {"$gte": ["$activity_done.%s" % acitivty_type, count]}
+                for activity_rule in activity_rules
+                for acitivty_type, count in activity_rule.items()
+                if acitivty_type in ["大型活动签到", "常规活动学时"]
+            ]}, 1, 0
+        ]}}
         # 查询  
         __colleges = mongo.coll_course_record.aggregate([
             # 匹配
@@ -148,11 +162,12 @@ class BoardUtils(object):
             "campus_year":  {},
         }
         for __college in __colleges:
-            __campus_addr  = __college["_id"]["campus_addr"]
-            __status       = __college["_id"]["status"]
-            __campus_grade = __college["_id"]["campus_grade"]
-            __campus_year  = __college["_id"]["campus_year"]
-            __count        = __college["count"]
+            __campus_addr    = __college["_id"]["campus_addr"]
+            __status         = __college["_id"]["status"]
+            __campus_grade   = __college["_id"]["campus_grade"]
+            __campus_year    = __college["_id"]["campus_year"]
+            __count          = __college["count"]
+            __activity_types = {activity_type: __college[activity_type] for activity_type in activity_types}
             # 聚合 年级
             if __campus_addr not in college_infos["campus_grade"]:
                 college_infos["campus_grade"][__campus_addr] = {}
@@ -160,6 +175,10 @@ class BoardUtils(object):
                 college_infos["campus_grade"][__campus_addr][__campus_grade] = {"总计": 0}
             if __status not in college_infos["campus_grade"][__campus_addr][__campus_grade] :
                 college_infos["campus_grade"][__campus_addr][__campus_grade][__status] = 0
+            for __activity_type, __activity_type_count in __activity_types.items():
+                if __activity_type not in college_infos["campus_grade"][__campus_addr][__campus_grade] :
+                    college_infos["campus_grade"][__campus_addr][__campus_grade][__activity_type] = 0
+                college_infos["campus_grade"][__campus_addr][__campus_grade][__activity_type] += __activity_type_count
             college_infos["campus_grade"][__campus_addr][__campus_grade][__status] += __count
             college_infos["campus_grade"][__campus_addr][__campus_grade]["总计"] += __count
             # 聚合 入学年份 
@@ -169,6 +188,10 @@ class BoardUtils(object):
                 college_infos["campus_year"][__campus_addr][__campus_year] = {"总计": 0}
             if __status not in college_infos["campus_year"][__campus_addr][__campus_year] :
                 college_infos["campus_year"][__campus_addr][__campus_year][__status] = 0
+            for __activity_type, __activity_type_count in __activity_types.items():
+                if __activity_type not in college_infos["campus_year"][__campus_addr][__campus_year] :
+                    college_infos["campus_year"][__campus_addr][__campus_year][__activity_type] = 0
+                college_infos["campus_year"][__campus_addr][__campus_year][__activity_type] += __activity_type_count
             college_infos["campus_year"][__campus_addr][__campus_year][__status] += __count
             college_infos["campus_year"][__campus_addr][__campus_year]["总计"] += __count
         result["college_infos"] = college_infos
@@ -176,13 +199,14 @@ class BoardUtils(object):
             "type": "success",
             "text": "<br>".join([
                 "查询逻辑", 
-                "课程信息.%s == \"%s\"" % (course_record_utils.field_headers["course_code"], "CEC1020"),
-                "人员信息.%s == \"%s\"" % (user_utils.field_headers["campus_role"],          "学生"),
-                "人员信息.%s == \"%s\"" % (user_utils.field_headers["campus_type"],          "1 本科生"),
-                "人员信息.%s == \"%s\"" % (user_utils.field_headers["campus_status"],        "1 修读"),
-                "人员信息.%s <> \"%s\"" % (user_utils.field_headers["campus_source"],        "6 国际")
-            ])
+                "人员信息.%s == \"%s\"" % (user_utils.field_headers["campus_role"],   "学生"),
+                "人员信息.%s == \"%s\"" % (user_utils.field_headers["campus_type"],   "1 本科生"),
+                "人员信息.%s == \"%s\"" % (user_utils.field_headers["campus_status"], "1 修读"),
+                "人员信息.%s <> \"%s\"" % (user_utils.field_headers["campus_source"], "6 国际")
+            ] + sorted(["课程记录.活动进度.%s >= %s" % (acitivty_type, count) for activity_rule in activity_rules for acitivty_type, count in activity_rule.items()])
+            )
         })
+        print(college_infos)
         return result
 
 
