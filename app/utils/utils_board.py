@@ -206,7 +206,6 @@ class BoardUtils(object):
             ] + sorted(["课程记录.活动进度.%s >= %s" % (acitivty_type, count) for activity_rule in activity_rules for acitivty_type, count in activity_rule.items()])
             )
         })
-        print(college_infos)
         return result
 
 
