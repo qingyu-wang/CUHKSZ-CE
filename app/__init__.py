@@ -56,6 +56,17 @@ def create_app():
         print("[INFO] APSchedulerD [%s] executed" % "clean_dir")
         return
 
+    @scheduler.task(
+        "interval",
+        id="test",
+        seconds=5,
+        misfire_grace_time=100,
+        next_run_time=datetime.datetime.now() # run immediately
+    )
+    def job_test():
+        print("[INFO] test...")
+        return
+
 
     # Login Manager
     login_manager = LoginManager()
