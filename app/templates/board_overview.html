@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="block">
+
+    <!-- 标题 -->
+    <div class="box-invis">
+        <div class="content">
+            <a href="{{ url_for("view_board.overview") }}">
+                <h1>整体概况</h1>
+            </a>
+        </div>
+    </div>
+
+    <!-- 消息 -->
+    {% if msgs %}
+        {% for __msg in msgs %}
+            <div class="box-invis">
+                {% if __msg["type"] == "success" %}
+                    <div class="notification is-success"    style="width: 40rem">
+                {% elif __msg["type"] == "info" %}
+                    <div class="notification is-info"       style="width: 40rem">
+                {% elif __msg["type"] == "warn" %}
+                    <div class="notification is-warning"    style="width: 40rem">
+                {% elif __msg["type"] == "error" %}
+                    <div class="notification is-danger"     style="width: 40rem">
+                {% endif %}
+                        <button class="delete"></button>
+                        {{ __msg["text"]|safe }}
+                    </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- 有结果 -->
+    {% if overview_infos|length != 0 %}
+
+        {% for __1st_categ, _1st_categ_config in config["1st_categs"].items() %}
+            {% set __1st_categ_header  = _1st_categ_config["header"] %}
+            {% set __1st_categ_options = _1st_categ_config["options"] %}
+            <!-- 显示数据 -->
+            <div class="box">
+
+                <div class="box-invis">
+                    <div class="content">
+                        <h2>{{ __1st_categ_header }}</h2>
+                    </div>
+                </div>
+
+                {% for __2nd_categ_option in config["2nd_categ_options"] %}
+                    <div class="box-invis">
+                        <div class="content">
+                            <h3>{{ __2nd_categ_option }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="box-invis">
+                        <table class="table is-hoverable">
+                            <tbody>
+                                <!-- 标题 -->
+                                <tr>
+                                    <th style="text-align: center; width: 5rem">{{ __1st_categ_header }}</th>
+                                    {% for __3rd_categ_option in config["3rd_categ_options"] %}
+                                        <th style="text-align: center; width: 5rem">{{ __3rd_categ_option }}</th>
+                                    {% endfor %}
+                                </tr>
+                                <!-- 内容 -->
+                                {% for __1st_categ_option in __1st_categ_options %}
+                                    {% set __overview_info = overview_infos[__1st_categ][__2nd_categ_option][__1st_categ_option] %}
+                                    <tr>
+                                        <td style="text-align: center">{{ __1st_categ_option }}</td>
+                                        {% for __3rd_categ_option in config["3rd_categ_options"] %}
+                                            {% if   __3rd_categ_option == "已认证" %}
+                                                {% set __status_class = "status-auth" %}
+                                            {% elif __3rd_categ_option == "已完成" %}
+                                                {% set __status_class = "status-done" %}
+                                            {% elif __3rd_categ_option == "进行中" %}
+                                                {% set __status_class = "status-doing" %}
+                                            {% elif __3rd_categ_option == "未开始" %}
+                                                {% set __status_class = "status-undone" %}
+                                            {% endif %}
+                                            {% set __count = __overview_info[__3rd_categ_option] if __3rd_categ_option in __overview_info else 0 %}
+                                            <td style="text-align: center" class="{{ __status_class }}">{{ __count }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+
+        {% endfor %}
+
+    <!-- 无结果 -->
+    {% else %}
+        <div class="box">
+            <div class="box-invis">
+                <div class="content">
+                    <h2>无结果</h2>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+// 关闭消息
+document.addEventListener("DOMContentLoaded", () => {
+    (document.querySelectorAll(".notification .delete") || []).forEach(($delete) => {
+        const $notification = $delete.parentNode.parentNode;
+        $delete.addEventListener("click", () => {
+            $notification.parentNode.removeChild($notification);
+        });
+    });
+});
+</script>
+{% endblock %}

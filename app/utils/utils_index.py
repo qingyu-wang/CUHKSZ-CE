@@ -7,6 +7,20 @@ from .utils_auth import UserRole
 def get_nav():
 
     nav_info = {
+        "看板": {
+            "url": None,
+            "auth": [UserRole.staff, UserRole.admin],
+            "sub": {
+                "整体概况": {
+                    "url": url_for("view_board.overview"),
+                    "auth": [UserRole.staff, UserRole.admin]
+                },
+                "书院概况": {
+                    "url": url_for("view_board.college"),
+                    "auth": [UserRole.staff, UserRole.admin]
+                },
+            }
+        },
         "人员": {
             "url": None,
             "auth": [UserRole.staff, UserRole.admin],

@@ -92,6 +92,7 @@ def create_app():
     # Blueprint
     app.register_blueprint(bp_view_index,       url_prefix="/")
     app.register_blueprint(bp_view_auth,        url_prefix="/auth")
+    app.register_blueprint(bp_view_board,       url_prefix="/board")
     app.register_blueprint(bp_view_user,        url_prefix="/user")
     app.register_blueprint(bp_view_course,      url_prefix="/course")
     app.register_blueprint(bp_view_activity,    url_prefix="/activity")

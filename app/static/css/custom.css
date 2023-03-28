@@ -277,8 +277,8 @@ input, .input {
 .table tbody tr td.status-auth,
 .table tbody tr td.status-auth:not(.is-selected):hover,
 .table tbody tr td.status-auth a {
-    color: #00947e;
-    background-color: #ebfffc;
+    color: #990099;
+    background-color: #fff6ff;
 }
 
 .table.is-hoverable tbody tr.status-done,
@@ -288,8 +288,8 @@ input, .input {
 .table tbody tr td.status-done,
 .table tbody tr td.status-done:not(.is-selected):hover,
 .table tbody tr td.status-done a {
-    color: #296fa8;
-    background-color: #eff5fb;
+    color: #00947e;
+    background-color: #ebfffc;
 }
 
 .table.is-hoverable tbody tr.status-doing,
