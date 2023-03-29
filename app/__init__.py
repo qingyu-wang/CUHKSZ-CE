@@ -25,6 +25,7 @@ def create_app():
     # http://127.0.0.1:5000/scheduler/jobs
     scheduler = APScheduler()
     scheduler.api_enabled = True
+    scheduler.allowed_hosts = ["hss001"]
     scheduler.init_app(app)
     scheduler.start()
     print("[INFO] scheduler running: %s" % scheduler.running)
