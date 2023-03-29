@@ -74,8 +74,6 @@ def create_app():
         print("[INFO] APSchedulerD [%s] executed" % "clean_dir")
         return
 
-    import pdb
-    pdb.set_trace()
 
     # Login Manager
     login_manager = LoginManager()
