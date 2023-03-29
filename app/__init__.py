@@ -29,13 +29,13 @@ def create_app():
     scheduler.start()
     print("[INFO] scheduler running: %s" % scheduler.running)
 
-    # @scheduler.task(
-    #     "interval",
-    #     id="update_user_by_oracle",
-    #     minutes=30,
-    #     misfire_grace_time=600,
-    #     # next_run_time=datetime.datetime.now() # run immediately
-    # )
+    @scheduler.task(
+        "interval",
+        id="update_user_by_oracle",
+        minutes=30,
+        misfire_grace_time=600,
+        # next_run_time=datetime.datetime.now() # run immediately
+    )
     def job_update_user_by_oracle():
         print("[INFO] APSchedulerD [%s] start..." % "update_user_by_oracle")
         from .utils.utils_user_update_by_oracle import update_user_by_oracle
@@ -55,13 +55,13 @@ def create_app():
         misfire_grace_time=600,
     )
 
-    # @scheduler.task(
-    #     "interval",
-    #     id="clean_dir",
-    #     minutes=5,
-    #     misfire_grace_time=100,
-    #     next_run_time=datetime.datetime.now() # run immediately
-    # )
+    @scheduler.task(
+        "interval",
+        id="clean_dir",
+        minutes=5,
+        misfire_grace_time=100,
+        next_run_time=datetime.datetime.now() # run immediately
+    )
     def job_clean_dir():
         print("[INFO] APSchedulerD [%s] start..." % "clean_dir")
         from .utils.utils_file import file_utils
@@ -73,33 +73,6 @@ def create_app():
         )
         print("[INFO] APSchedulerD [%s] executed" % "clean_dir")
         return
-    scheduler.add_job(
-        func=job_clean_dir,
-        id="clean_dir",
-        trigger="interval",
-        minutes=5,
-        misfire_grace_time=100,
-        next_run_time=datetime.datetime.now() # run immediately
-    )
-
-    # @scheduler.task(
-    #     "interval",
-    #     id="test",
-    #     seconds=10,
-    #     misfire_grace_time=100,
-    #     next_run_time=datetime.datetime.now() # run immediately
-    # )
-    def job_test():
-        print("[INFO] test...")
-        return
-    scheduler.add_job(
-        func=job_test,
-        id="test",
-        trigger="interval",
-        seconds=10,
-        misfire_grace_time=100,
-        next_run_time=datetime.datetime.now() # run immediately
-    )
 
 
     # Login Manager
