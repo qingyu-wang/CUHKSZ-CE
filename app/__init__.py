@@ -47,13 +47,6 @@ def create_app():
         )
         print("[INFO] APSchedulerD [%s] executed" % "update_user_by_oracle")
         return
-    scheduler.add_job(
-        func=job_update_user_by_oracle,
-        id="update_user_by_oracle",
-        trigger="interval",
-        minutes=30,
-        misfire_grace_time=600,
-    )
 
     @scheduler.task(
         "interval",
