@@ -1,5 +1,5 @@
 """
-Utils Board
+Utils Dashboard
 """
 
 from .utils_mongo import mongo
@@ -7,7 +7,7 @@ from .utils_user import user_utils
 from .utils_course_record import course_record_utils
 
 
-class BoardUtils(object):
+class DashboardUtils(object):
 
     # ---
     # function.get
@@ -209,4 +209,4 @@ class BoardUtils(object):
         return result
 
 
-board_utils = BoardUtils()
+dashboard_utils = DashboardUtils()

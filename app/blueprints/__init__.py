@@ -2,7 +2,7 @@ from .view_index import bp_view_index
 
 from .view_auth import bp_view_auth
 
-from .view_board import bp_view_board
+from .view_dashboard import bp_view_dashboard
 
 from .view_user import bp_view_user
 

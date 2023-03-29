@@ -12,11 +12,11 @@ def get_nav():
             "auth": [UserRole.staff, UserRole.admin],
             "sub": {
                 "整体概况": {
-                    "url": url_for("view_board.overview"),
+                    "url": url_for("view_dashboard.overview"),
                     "auth": [UserRole.staff, UserRole.admin]
                 },
                 "书院概况": {
-                    "url": url_for("view_board.college"),
+                    "url": url_for("view_dashboard.college"),
                     "auth": [UserRole.staff, UserRole.admin]
                 },
             }

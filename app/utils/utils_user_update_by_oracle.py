@@ -1,5 +1,3 @@
-import datetime
-
 from tqdm import tqdm
 
 from .utils_mongo import mongo
@@ -313,13 +311,6 @@ def update_user_by_oracle():
             pbar.update(1)
 
     print("[INFO] done [update_cnt=%s]" % update_cnt)
-
-    mongo.coll_cache.update_one(
-        {"name": "user_update_by_oracle"},
-        {"$set": {"data": {"updatetime": datetime.datetime.now()}}},
-        upsert=True
-    )
-
     return update_cnt
 
 

@@ -5,19 +5,19 @@ from flask import render_template, request
 from flask_login import login_required, current_user
 
 from ..utils.utils_auth import UserRole
-from ..utils.utils_board import board_utils
+from ..utils.utils_dashboard import dashboard_utils
 from ..utils.utils_course_record import course_record_utils
 from ..utils.utils_error import render_error_template
 from ..utils.utils_index import get_nav
 from ..utils.utils_user import user_utils
 
 
-bp_view_board = Blueprint("view_board", __name__)
+bp_view_dashboard = Blueprint("view_dashboard", __name__)
 
 
 # 整体概况
-# http://127.0.0.1:5000/board/overview/
-@bp_view_board.route("/overview/", methods=["GET"])
+# http://127.0.0.1:5000/dashboard/overview/
+@bp_view_dashboard.route("/overview/", methods=["GET"])
 @login_required
 def overview():
 
@@ -26,7 +26,7 @@ def overview():
         return render_error_template(message="您没有权限访问")
 
     # Template
-    template_path = "board_overview.html"
+    template_path = "dashboard_overview.html"
 
     # Params
     course_record_field_options = course_record_utils.field_options
@@ -54,7 +54,7 @@ def overview():
             request.method, request.endpoint
         ))
         # 查询
-        result = board_utils.get_overview_infos()
+        result = dashboard_utils.get_overview_infos()
         params["msgs"].extend(result["msgs"])
         if result["overview_infos"]:
             params["overview_infos"] = result["overview_infos"]
@@ -64,8 +64,8 @@ def overview():
 
 
 # 书院概况
-# http://127.0.0.1:5000/board/college/
-@bp_view_board.route("/college/", methods=["GET", "POST"])
+# http://127.0.0.1:5000/dashboard/college/
+@bp_view_dashboard.route("/college/", methods=["GET", "POST"])
 @login_required
 def college():
 
@@ -74,7 +74,7 @@ def college():
         return render_error_template(message="您没有权限访问")
 
     # Template
-    template_path = "board_college.html"
+    template_path = "dashboard_college.html"
 
     # Params
     course_record_field_options = course_record_utils.field_options
@@ -102,7 +102,7 @@ def college():
             request.method, request.endpoint
         ))
         # 查询
-        result = board_utils.get_college_infos()
+        result = dashboard_utils.get_college_infos()
         params["msgs"].extend(result["msgs"])
         if result["activity_types"]:
             params["config"]["3rd_categ_options"] += result["activity_types"]

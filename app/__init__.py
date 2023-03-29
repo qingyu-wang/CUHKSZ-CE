@@ -27,45 +27,79 @@ def create_app():
     scheduler.api_enabled = True
     scheduler.init_app(app)
     scheduler.start()
+    print("[INFO] scheduler running: %s" % scheduler.running)
 
-    @scheduler.task(
-        "interval",
-        id="user_update_by_oracle",
-        minutes=30,
-        misfire_grace_time=600,
-        # next_run_time=datetime.datetime.now() # run immediately
-    )
+    # @scheduler.task(
+    #     "interval",
+    #     id="update_user_by_oracle",
+    #     minutes=30,
+    #     misfire_grace_time=600,
+    #     # next_run_time=datetime.datetime.now() # run immediately
+    # )
     def job_update_user_by_oracle():
         print("[INFO] APSchedulerD [%s] start..." % "update_user_by_oracle")
         from .utils.utils_user_update_by_oracle import update_user_by_oracle
         update_user_by_oracle()
+        mongo.coll_cache.update_one(
+            {"name": "user_update_by_oracle"},
+            {"$set": {"data": {"updatetime": datetime.datetime.now()}}},
+            upsert=True
+        )
         print("[INFO] APSchedulerD [%s] executed" % "update_user_by_oracle")
         return
-
-    @scheduler.task(
-        "interval",
-        id="clean_dir",
-        minutes=5,
-        misfire_grace_time=100,
-        next_run_time=datetime.datetime.now() # run immediately
+    scheduler.add_job(
+        func=job_update_user_by_oracle,
+        id="update_user_by_oracle",
+        trigger="interval",
+        minutes=30,
+        misfire_grace_time=600,
     )
+
+    # @scheduler.task(
+    #     "interval",
+    #     id="clean_dir",
+    #     minutes=5,
+    #     misfire_grace_time=100,
+    #     next_run_time=datetime.datetime.now() # run immediately
+    # )
     def job_clean_dir():
         print("[INFO] APSchedulerD [%s] start..." % "clean_dir")
         from .utils.utils_file import file_utils
         file_utils.clean_dir(file_dir="temp_dir", max_seconds=300)
+        mongo.coll_cache.update_one(
+            {"name": "job_clean_dir"},
+            {"$set": {"data": {"updatetime": datetime.datetime.now()}}},
+            upsert=True
+        )
         print("[INFO] APSchedulerD [%s] executed" % "clean_dir")
         return
-
-    @scheduler.task(
-        "interval",
-        id="test",
-        seconds=5,
+    scheduler.add_job(
+        func=job_clean_dir,
+        id="clean_dir",
+        trigger="interval",
+        minutes=5,
         misfire_grace_time=100,
         next_run_time=datetime.datetime.now() # run immediately
     )
+
+    # @scheduler.task(
+    #     "interval",
+    #     id="test",
+    #     seconds=10,
+    #     misfire_grace_time=100,
+    #     next_run_time=datetime.datetime.now() # run immediately
+    # )
     def job_test():
         print("[INFO] test...")
         return
+    scheduler.add_job(
+        func=job_test,
+        id="test",
+        trigger="interval",
+        seconds=10,
+        misfire_grace_time=100,
+        next_run_time=datetime.datetime.now() # run immediately
+    )
 
 
     # Login Manager
@@ -103,7 +137,7 @@ def create_app():
     # Blueprint
     app.register_blueprint(bp_view_index,       url_prefix="/")
     app.register_blueprint(bp_view_auth,        url_prefix="/auth")
-    app.register_blueprint(bp_view_board,       url_prefix="/board")
+    app.register_blueprint(bp_view_dashboard,       url_prefix="/dashboard")
     app.register_blueprint(bp_view_user,        url_prefix="/user")
     app.register_blueprint(bp_view_course,      url_prefix="/course")
     app.register_blueprint(bp_view_activity,    url_prefix="/activity")
