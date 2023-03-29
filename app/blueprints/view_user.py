@@ -258,7 +258,7 @@ def info_for_admin():
         "user_infos": None,
         "file_infos": None,
         "extra_infos": [
-            "系统数据定期更新 (不会覆盖锁定字段)\n\n[最近更新] %s\n[下次更新] %s" % (
+            "系统数据定期更新 (不会覆盖锁定字段)\n\n[最近更新] %s\n[预计更新] %s" % (
                 user_update_by_oracle_info["updatetime"].strftime("%Y-%m-%d %H:%M:%S"),
                 user_update_by_oracle_info["nextruntime"].strftime("%Y-%m-%d %H:%M:%S")
             )
