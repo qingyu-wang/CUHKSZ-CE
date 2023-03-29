@@ -7,6 +7,4 @@
 
 联动更新recheck
 
-Supervisor apscheduler问题，没有running
-
 上一次自动跟新时间显示在数据页和管理页

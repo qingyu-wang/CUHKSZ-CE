@@ -9,6 +9,7 @@ mongo.coll_user_info.create_index(
 """
 
 import datetime
+import socket
 import traceback
 
 from openpyxl import Workbook, load_workbook
@@ -20,6 +21,9 @@ from flask_login import current_user
 
 from .utils_file import file_utils
 from .utils_mongo import mongo
+
+
+HOSTNAME = socket.gethostname()
 
 
 class UserUtils(object):
@@ -265,7 +269,7 @@ class UserUtils(object):
         return result
 
     def get_updatetime_by_oracle(self):
-        data = mongo.coll_cache.find_one({"name": "user_update_by_oracle"})["data"]
+        data = mongo.coll_cache.find_one({"name": "[%s] update_user_by_oracle" % HOSTNAME})["data"]
         return data["updatetime"]
 
     # ---

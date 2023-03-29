@@ -1,4 +1,5 @@
 import datetime
+import socket
 
 from flask import Flask
 from flask_apscheduler import APScheduler
@@ -7,6 +8,9 @@ from flask_login import LoginManager
 from .blueprints import *
 from .utils.utils_mongo import mongo
 from .utils.utils_auth import FlaskUser
+
+
+HOSTNAME = socket.gethostname()
 
 
 def create_app():
@@ -25,7 +29,6 @@ def create_app():
     # http://127.0.0.1:5000/scheduler/jobs
     scheduler = APScheduler()
     scheduler.api_enabled = True
-    scheduler.allowed_hosts = ["hss001"]
     scheduler.init_app(app)
     scheduler.start()
     print("[INFO] scheduler running: %s" % scheduler.running)
@@ -42,7 +45,7 @@ def create_app():
         from .utils.utils_user_update_by_oracle import update_user_by_oracle
         update_user_by_oracle()
         mongo.coll_cache.update_one(
-            {"name": "user_update_by_oracle"},
+            {"name": "[%s] update_user_by_oracle" % HOSTNAME},
             {"$set": {"data": {"updatetime": datetime.datetime.now()}}},
             upsert=True
         )
@@ -61,13 +64,18 @@ def create_app():
         from .utils.utils_file import file_utils
         file_utils.clean_dir(file_dir="temp_dir", max_seconds=300)
         mongo.coll_cache.update_one(
-            {"name": "job_clean_dir"},
-            {"$set": {"data": {"updatetime": datetime.datetime.now()}}},
+            {"name": "[%s] job_clean_dir" % HOSTNAME},
+            {"$set": {"data": {
+                "updatetime": datetime.datetime.now(),
+                "updatetime": datetime.datetime.now(),
+            }}},
             upsert=True
         )
         print("[INFO] APSchedulerD [%s] executed" % "clean_dir")
         return
 
+    import pdb
+    pdb.set_trace()
 
     # Login Manager
     login_manager = LoginManager()
