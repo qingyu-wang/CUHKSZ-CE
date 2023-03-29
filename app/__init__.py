@@ -36,7 +36,7 @@ def create_app():
     @scheduler.task(
         "interval",
         id="update_user_by_oracle",
-        minutes=30,
+        hours=1,
         misfire_grace_time=600,
         # next_run_time=datetime.datetime.now() # run immediately
     )
@@ -46,7 +46,10 @@ def create_app():
         update_user_by_oracle()
         mongo.coll_cache.update_one(
             {"name": "[%s] update_user_by_oracle" % HOSTNAME},
-            {"$set": {"data": {"updatetime": datetime.datetime.now()}}},
+            {"$set": {"data": {
+                "updatetime": datetime.datetime.now(),
+                "nextruntime": datetime.datetime.now()+datetime.timedelta(hours=1),
+            }}},
             upsert=True
         )
         print("[INFO] APSchedulerD [%s] executed" % "update_user_by_oracle")
@@ -67,7 +70,7 @@ def create_app():
             {"name": "[%s] job_clean_dir" % HOSTNAME},
             {"$set": {"data": {
                 "updatetime": datetime.datetime.now(),
-                "updatetime": datetime.datetime.now(),
+                "nextruntime": datetime.datetime.now()+datetime.timedelta(minutes=5),
             }}},
             upsert=True
         )
