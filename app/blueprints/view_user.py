@@ -279,10 +279,10 @@ def info_for_admin():
         campus_idno = request.args.get("campus_idno", "").strip()
         name = request.args.get("name", "").strip()
         if campus_idno:
-            print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s, campus_idno=%s]" % (
+            print("[INFO] %s %s/%s (%s) [%s] => %s [campus_idno=%s]" % (
                 datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 current_user.idno, current_user.username, current_user.role,
-                request.method, request.endpoint, method,
+                request.method, request.endpoint,
                 campus_idno
             ))
             params["config"]["search"]["campus_idno"]["default"] = campus_idno
@@ -291,10 +291,10 @@ def info_for_admin():
             if result_1["user_info"]:
                 params["user_infos"] = [result_1["user_info"]]
         elif name:
-            print("[INFO] %s %s/%s (%s) [%s] => %s [method=%s, name=%s]" % (
+            print("[INFO] %s %s/%s (%s) [%s] => %s [name=%s]" % (
                 datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 current_user.idno, current_user.username, current_user.role,
-                request.method, request.endpoint, method,
+                request.method, request.endpoint,
                 name
             ))
             params["config"]["search"]["name"]["default"] = name
