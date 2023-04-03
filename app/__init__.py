@@ -38,14 +38,17 @@ def create_app():
         id="update_user_by_oracle",
         hours=1,
         misfire_grace_time=600,
-        # next_run_time=datetime.datetime.now() # run immediately
+        next_run_time=max(
+            mongo.coll_cache.find_one({"name": "[%s] job_update_user_by_oracle" % HOSTNAME})["data"]["nextruntime"],
+            datetime.datetime.now() # run immediately
+        )
     )
     def job_update_user_by_oracle():
         print("[INFO] APSchedulerD [%s] start..." % "update_user_by_oracle")
         from .utils.utils_user_update_by_oracle import update_user_by_oracle
         update_user_by_oracle()
         mongo.coll_cache.update_one(
-            {"name": "[%s] update_user_by_oracle" % HOSTNAME},
+            {"name": "[%s] job_update_user_by_oracle" % HOSTNAME},
             {"$set": {"data": {
                 "updatetime": datetime.datetime.now(),
                 "nextruntime": datetime.datetime.now()+datetime.timedelta(hours=1),
@@ -60,7 +63,10 @@ def create_app():
         id="clean_dir",
         minutes=5,
         misfire_grace_time=100,
-        next_run_time=datetime.datetime.now() # run immediately
+        next_run_time=max(
+            mongo.coll_cache.find_one({"name": "[%s] job_clean_dir" % HOSTNAME})["data"]["nextruntime"],
+            datetime.datetime.now() # run immediately
+        )
     )
     def job_clean_dir():
         print("[INFO] APSchedulerD [%s] start..." % "clean_dir")

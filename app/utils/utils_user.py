@@ -269,7 +269,7 @@ class UserUtils(object):
         return result
 
     def get_updatetime_by_oracle(self):
-        data = mongo.coll_cache.find_one({"name": "[%s] update_user_by_oracle" % HOSTNAME})["data"]
+        data = mongo.coll_cache.find_one({"name": "[%s] job_update_user_by_oracle" % HOSTNAME})["data"]
         return data
 
     # ---
