@@ -1,6 +1,6 @@
 # Environment Windows
 
-```
+```shell
 conda create -n CUHKSZ-CE python=3.9
 
 conda activate CUHKSZ-CE
@@ -15,15 +15,15 @@ conda install -y requests
 
 pip install Flask-APScheduler
 
-# mongodb
+# MongoDB
 pip install pymongo[srv]
 
-# oracle
+# Oracle
 # install https://www.oracle.com/database/technologies/instant-client/winx64-64-downloads.html
 conda install -y cx_oracle 
 # modify "lib_dir" in utils/utils_oracle.py
 
-# windows
+# Windows
 conda install -y pywin32
 conda install -y waitress
 ```
