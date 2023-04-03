@@ -347,6 +347,16 @@
         {% endif %}
 
     {% endif %}
+
+    <!-- 额外信息 -->
+    <div class="box-invis">
+        <div class="content">
+            {% for __extra_info in extra_infos %}
+                <h3>{{ __extra_info|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __extra_info is not none }}</h3>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}
 

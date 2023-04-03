@@ -1,4 +1,5 @@
 import datetime
+import socket
 
 from flask import Blueprint
 from flask import render_template, request
@@ -11,8 +12,11 @@ from ..utils.utils_course import course_utils
 from ..utils.utils_course_record import course_record_utils
 from ..utils.utils_error import render_error_template
 from ..utils.utils_index import get_nav
+from ..utils.utils_mongo import mongo
 from ..utils.utils_user import user_utils
 
+
+HOSTNAME = socket.gethostname()
 
 bp_view_course = Blueprint("view_course", __name__)
 
@@ -336,6 +340,7 @@ def info_for_admin():
     course_info_field_headers = course_utils.field_headers
     course_info_field_options = course_utils.field_options
     course_info_default_doc   = course_utils.new_doc
+    task_info                 = mongo.coll_cache.find_one({"name": "[%s] job_update_course_record" % HOSTNAME})
     params = {
         "nav": get_nav(),
         "msgs": [],
@@ -356,6 +361,13 @@ def info_for_admin():
         },
         "course_infos": None,
         "file_infos": None,
+        "extra_infos": [
+            "更新 <i><b>活动规则</b></i> 不会同步更新 <b>课程记录</b>\n(请等待系统定期更新)",
+            "系统定期更新: <b>课程记录</b>\n最近更新: %s\n预计更新: %s" % (
+                task_info["data"]["updatetime"].strftime("%Y-%m-%d %H:%M:%S")  if task_info else "",
+                task_info["data"]["nextruntime"].strftime("%Y-%m-%d %H:%M:%S") if task_info else ""
+            )
+        ]
     }
 
     # GET
@@ -492,6 +504,7 @@ def data():
     course_info_field_headers   = course_utils.field_headers
     course_record_field_headers = course_record_utils.field_headers
     course_record_field_options = course_record_utils.field_options
+    task_info                   = mongo.coll_cache.find_one({"name": "[%s] job_update_course_record" % HOSTNAME})
     params = {
         "nav": get_nav(),
         "msgs": [],
@@ -562,6 +575,15 @@ def data():
         },
         "course_infos": None,
         "file_infos": None,
+        "extra_infos": [
+            "<b>课程信息</b> 关键字段: <i><b>课程代码</b></i>",
+            "<b>课程记录</b> 关键字段: <i><b>课程代码</b></i>, <i><b>校园卡号</b></i>",
+            "请谨慎使用字段: <i><b>删除</b></i>\n(有 <b>活动信息</b> 则不能删除 <b>课程信息</b>)",
+            "系统定期更新: <b>课程记录</b>\n最近更新: %s\n预计更新: %s" % (
+                task_info["data"]["updatetime"].strftime("%Y-%m-%d %H:%M:%S")  if task_info else "",
+                task_info["data"]["nextruntime"].strftime("%Y-%m-%d %H:%M:%S") if task_info else ""
+            )
+        ]
     }
 
     # GET

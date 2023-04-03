@@ -294,40 +294,6 @@ class CourseUtils(object):
                 "text": "更新成功<br>课程信息 [ 总数=1, 更新=%s, 错误=0 ]" % result_1.modified_count
             })
 
-            # 同步更新 活动规则
-            if "activity_rules" in update_info:
-
-                # 更新 课程记录
-                course_record_num = mongo.coll_course_record.count_documents({"course_code": old_course_code})
-                course_record_modified_count = 0
-                with tqdm(desc="[INFO] update_course_record", total=course_record_num) as pbar:
-                    for course_record in mongo.coll_course_record.find({"course_code": old_course_code}).sort([("campus_idno", 1)]):
-                        result_2 = course_record_utils.update_record(
-                            course_code=course_record["course_code"],
-                            campus_idno=course_record["campus_idno"]
-                        )
-                        if result_2["msgs"][-1]["type"] == "success":
-                            course_record_modified_count += 1
-                        pbar.update(1)
-                if course_record_modified_count == course_record_num:
-                    result["msgs"].append({
-                        "type": "success",
-                        "text": "更新成功<br>活动规则 => 课程记录 [ 总数=%s, 更新=%s, 错误=%s ]" % (
-                            course_record_num,
-                            course_record_modified_count,
-                            course_record_num - course_record_modified_count
-                        )
-                    })
-                else:
-                    result["msgs"].append({
-                        "type": "error",
-                        "text": "更新失败<br>活动规则 => 课程记录 [ 总数=%s, 更新=%s, 错误=%s ]" % (
-                            course_record_num,
-                            course_record_modified_count,
-                            course_record_num - course_record_modified_count
-                        )
-                    })
-
             # 同步更新 课程代码
             if "course_code" in update_info:
 

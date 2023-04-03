@@ -280,7 +280,7 @@ class CourseRecordUtils(object):
     # function.update
     # ---
 
-    def update_record(self, course_code, campus_idno):
+    def update_record(self, course_code, campus_idno, modifyuser=None):
         result = {
             "msgs": []
         }
@@ -366,7 +366,7 @@ class CourseRecordUtils(object):
 
         # 更新信息
         update_info["modifytime"] = datetime.datetime.now()
-        update_info["modifyuser"] = current_user.idno
+        update_info["modifyuser"] = modifyuser if modifyuser else current_user.idno
         __result = mongo.coll_course_record.update_one(
             {"course_code": course_code, "campus_idno": campus_idno},
             {"$set": update_info}
@@ -383,6 +383,60 @@ class CourseRecordUtils(object):
                 "type": "error",
                 "text": "更新失败<br>课程记录 [ 总数=1, 更新=0, 错误=1 ]"
             })
+        return result
+
+    def update_record_batch(self):
+        result = {
+            "msgs": []
+        }
+        course_codes = mongo.coll_course_info.distinct("course_code")
+        campus_idnos = mongo.coll_user_info.distinct("campus_idno", {"campus_role": "学生"})
+        for course_code in course_codes:
+            modified_count = 0
+            unmodified_count = 0
+            with tqdm(desc="[INFO] update_course_record [ course_code=%s ]" % course_code, total=len(campus_idnos)) as pbar:
+                for campus_idno in campus_idnos:
+                    if mongo.coll_course_record.count_documents({"course_code": course_code, "campus_idno": campus_idno}) == 0:
+                        self.create_record(
+                            course_code=course_code,
+                            campus_idno=campus_idno
+                        )
+                    __result = self.update_record(
+                        course_code=course_code,
+                        campus_idno=campus_idno,
+                        modifyuser="system"
+                    )
+                    if __result["msgs"][-1]["type"] == "success":
+                        modified_count += 1
+                    elif __result["msgs"][-1]["type"] == "warn":
+                        unmodified_count += 1
+                    else:
+                        print(__result)
+                    pbar.set_postfix(modified_count=modified_count, unmodified_count=unmodified_count)
+                    pbar.update(1)
+            if (modified_count + unmodified_count) == len(campus_idnos):
+                result["msgs"].append({
+                    "type": "success",
+                    "text": "更新成功<br>%s => 课程记录 [ 总数=%s, 更新=%s, 无需更新=%s, 错误=%s ]" % (
+                        course_code,
+                        len(campus_idnos),
+                        modified_count,
+                        unmodified_count,
+                        len(campus_idnos) - modified_count - unmodified_count
+                    )
+                })
+            else:
+                result["msgs"].append({
+                    "type": "error",
+                    "text": "更新失败<br>%s => 课程记录 [ 总数=%s, 更新=%s, 无需更新=%s, 错误=%s ]" % (
+                        course_code,
+                        len(campus_idnos),
+                        modified_count,
+                        unmodified_count,
+                        len(campus_idnos) - modified_count - unmodified_count
+                    )
+                })
+            print("[INFO] %s" % result["msgs"][-1]["text"].replace("<br>", "\n"))
         return result
 
     def update_record_by_file(self, update_file):
@@ -862,3 +916,11 @@ class CourseRecordUtils(object):
 
 
 course_record_utils = CourseRecordUtils()
+
+
+if __name__ == "__main__":
+    """
+python -m app.utils.utils_course_record
+    """
+
+    course_record_utils.update_record_batch()

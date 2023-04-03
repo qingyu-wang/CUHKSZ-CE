@@ -350,6 +350,7 @@ class ActivityRecordUtils(object):
                                     campus_idno=campus_idno
                                 )
                                 if __result["msgs"][-1]["type"] == "error":
+                                    result["msgs"].extend(__result["msgs"])
                                     print("[ERROR] %s" % __result["msgs"][-1]["text"])
 
                         else:
@@ -393,6 +394,7 @@ class ActivityRecordUtils(object):
                                 campus_idno=campus_idno
                             )
                             if __result["msgs"][-1]["type"] == "error":
+                                result["msgs"].extend(__result["msgs"])
                                 print("[ERROR] %s" % __result["msgs"][-1]["text"])
 
         result["msgs"] = [{

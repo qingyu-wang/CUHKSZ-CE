@@ -1,4 +1,5 @@
 import datetime
+import socket
 
 from flask import Blueprint
 from flask import render_template, request
@@ -11,8 +12,11 @@ from ..utils.utils_course import course_utils
 from ..utils.utils_course_record import course_record_utils
 from ..utils.utils_error import render_error_template
 from ..utils.utils_index import get_nav
+from ..utils.utils_mongo import mongo
 from ..utils.utils_user import user_utils
 
+
+HOSTNAME = socket.gethostname()
 
 bp_view_user = Blueprint("view_user", __name__)
 
@@ -221,9 +225,9 @@ def info_for_admin():
     template_path = "user_info_for_admin.html"
 
     # Params
-    user_info_field_headers    = user_utils.field_headers
-    user_info_field_options    = user_utils.field_options
-    user_update_by_oracle_info = user_utils.get_updatetime_by_oracle()
+    user_info_field_headers = user_utils.field_headers
+    user_info_field_options = user_utils.field_options
+    task_info               = mongo.coll_cache.find_one({"name": "[%s] job_update_user_by_oracle" % HOSTNAME})
     params = {
         "nav": get_nav(),
         "msgs": [],
@@ -258,9 +262,9 @@ def info_for_admin():
         "user_infos": None,
         "file_infos": None,
         "extra_infos": [
-            "系统数据定期更新 (不会覆盖锁定字段)\n\n[最近更新] %s\n[预计更新] %s" % (
-                user_update_by_oracle_info["updatetime"].strftime("%Y-%m-%d %H:%M:%S"),
-                user_update_by_oracle_info["nextruntime"].strftime("%Y-%m-%d %H:%M:%S")
+            "系统定期更新: <b>人员信息</b>\n(不会覆盖锁定字段)\n最近更新: %s\n预计更新: %s" % (
+                task_info["data"]["updatetime"].strftime("%Y-%m-%d %H:%M:%S")  if task_info else "",
+                task_info["data"]["nextruntime"].strftime("%Y-%m-%d %H:%M:%S") if task_info else ""
             )
         ]
     }
@@ -410,6 +414,7 @@ def data():
     # Params
     user_info_field_headers = user_utils.field_headers
     user_info_field_options = user_utils.field_options
+    task_info               = mongo.coll_cache.find_one({"name": "[%s] job_update_user_by_oracle" % HOSTNAME})
     params = {
         "nav": get_nav(),
         "msgs": [],
@@ -434,6 +439,14 @@ def data():
         },
         "user_infos": None,
         "file_infos": None,
+        "extra_infos": [
+            "<b>人员信息</b> 索引字段: <i><b>校园卡号</b></i>",
+            "请谨慎使用字段: <i><b>删除</b></i>\n(有 <b>活动记录</b> 则不能删除 <b>人员信息</b>)",
+            "系统定期更新: <b>人员信息</b>\n(不会覆盖锁定字段)\n最近更新: %s\n预计更新: %s" % (
+                task_info["data"]["updatetime"].strftime("%Y-%m-%d %H:%M:%S")  if task_info else "",
+                task_info["data"]["nextruntime"].strftime("%Y-%m-%d %H:%M:%S") if task_info else ""
+            )
+        ]
     }
 
     # GET

@@ -171,7 +171,6 @@
                 <div class="box-invis">
                     <div class="content">
                         <h2>查询结果</h2>
-                        <h3>更新 "活动规则" 需要较久时间, 请耐心等待 (约 5 分钟)</h3>
                     </div>
                 </div>
 
@@ -257,6 +256,16 @@
         {% endif %}
 
     {% endif %}
+
+    <!-- 额外信息 -->
+    <div class="box-invis">
+        <div class="content">
+            {% for __extra_info in extra_infos %}
+                <h3>{{ __extra_info|strftime|replace("\n","<br/>")|replace("'",'"')|safe if __extra_info is not none }}</h3>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}
 

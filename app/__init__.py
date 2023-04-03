@@ -33,18 +33,18 @@ def create_app():
     scheduler.start()
     print("[INFO] scheduler running: %s" % scheduler.running)
 
+    task_cache = mongo.coll_cache.find_one({"name": "[%s] job_update_user_by_oracle" % HOSTNAME})
     @scheduler.task(
         "interval",
         id="update_user_by_oracle",
         hours=1,
         misfire_grace_time=600,
         next_run_time=max(
-            mongo.coll_cache.find_one({"name": "[%s] job_update_user_by_oracle" % HOSTNAME})["data"]["nextruntime"],
+            task_cache["data"]["nextruntime"] if task_cache else datetime.datetime.now(),
             datetime.datetime.now() # run immediately
         )
     )
     def job_update_user_by_oracle():
-        print("[INFO] APSchedulerD [%s] start..." % "update_user_by_oracle")
         from .utils.utils_user_update_by_oracle import update_user_by_oracle
         update_user_by_oracle()
         mongo.coll_cache.update_one(
@@ -58,18 +58,18 @@ def create_app():
         print("[INFO] APSchedulerD [%s] executed" % "update_user_by_oracle")
         return
 
+    task_cache = mongo.coll_cache.find_one({"name": "[%s] job_clean_dir" % HOSTNAME})
     @scheduler.task(
         "interval",
         id="clean_dir",
         minutes=5,
         misfire_grace_time=100,
         next_run_time=max(
-            mongo.coll_cache.find_one({"name": "[%s] job_clean_dir" % HOSTNAME})["data"]["nextruntime"],
+            task_cache["data"]["nextruntime"] if task_cache else datetime.datetime.now(),
             datetime.datetime.now() # run immediately
         )
     )
     def job_clean_dir():
-        print("[INFO] APSchedulerD [%s] start..." % "clean_dir")
         from .utils.utils_file import file_utils
         file_utils.clean_dir(file_dir="temp_dir", max_seconds=300)
         mongo.coll_cache.update_one(
@@ -81,6 +81,31 @@ def create_app():
             upsert=True
         )
         print("[INFO] APSchedulerD [%s] executed" % "clean_dir")
+        return
+
+    task_cache = mongo.coll_cache.find_one({"name": "[%s] job_update_course_record" % HOSTNAME})
+    @scheduler.task(
+        "interval",
+        id="update_course_record",
+        hours=1,
+        misfire_grace_time=600,
+        next_run_time=max(
+            task_cache["data"]["nextruntime"] if task_cache else datetime.datetime.now(),
+            datetime.datetime.now() # run immediately
+        )
+    )
+    def job_update_course_record():
+        from .utils.utils_course_record import course_record_utils
+        course_record_utils.update_record_batch()
+        mongo.coll_cache.update_one(
+            {"name": "[%s] job_update_course_record" % HOSTNAME},
+            {"$set": {"data": {
+                "updatetime": datetime.datetime.now(),
+                "nextruntime": datetime.datetime.now()+datetime.timedelta(hours=1),
+            }}},
+            upsert=True
+        )
+        print("[INFO] APSchedulerD [%s] executed" % "update_course_record")
         return
 
 
