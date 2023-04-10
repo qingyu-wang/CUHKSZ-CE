@@ -16,8 +16,8 @@
 
 ## Environment
 
-- [windows](./notes/environment-windows.md)
-- [linux](./notes/environment-linux.md)
+- [windows](./docs/environment-windows.md)
+- [linux](./docs/environment-linux.md)
 
 
 
@@ -46,14 +46,14 @@
 
 
 ## Tool
-- [mongo](./notes/tool-mongo.md)
-- [oracle](./notes/tool-oracle.md)
+- [mongo](./docs/tool-mongo.md)
+- [oracle](./docs/tool-oracle.md)
 
 
 
 ## Server
 
-[server](./notes/server.md#main)
+[server](./docs/server.md#main)
 
 
 
