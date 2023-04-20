@@ -388,7 +388,9 @@ class ActivityUtils(object):
         # 校验字段 无效字段
         invalid_headers = []
         for __header in row_header:
-            if __header \
+            if __header == "删除":
+                continue
+            elif __header \
             and activity_info_header_fields[__header] in activity_info_field_headers \
             and (
                 activity_info_header_fields[__header] == "activity_code" or \

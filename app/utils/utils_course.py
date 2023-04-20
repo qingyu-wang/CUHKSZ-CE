@@ -396,7 +396,9 @@ class CourseUtils(object):
         # 校验字段 无效字段
         invalid_headers = []
         for __header in row_header:
-            if __header \
+            if __header == "删除":
+                continue
+            elif __header \
             and course_info_header_fields[__header] in course_info_field_headers \
             and (
                 course_info_header_fields[__header] == "course_code" or \

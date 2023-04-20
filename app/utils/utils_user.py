@@ -428,9 +428,14 @@ class UserUtils(object):
         # 校验字段 无效字段
         invalid_headers = []
         for __header in row_header:
-            if __header \
+            if __header == "删除":
+                continue
+            elif __header \
             and user_header_fields[__header] in user_info_field_headers \
-            and (user_header_fields[__header] == "campus_idno" or user_header_fields[__header] not in user_info_field_fixeds):
+            and (
+                user_header_fields[__header] == "campus_idno" or \
+                user_header_fields[__header] not in user_info_field_fixeds
+            ):
                 continue
             else:
                 invalid_headers.append(__header)
