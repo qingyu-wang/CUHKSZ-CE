@@ -233,7 +233,6 @@ class UserUtils(object):
 
             for __activity_record in __activity_records:
                 __course_code = __activity_record["course_info"]["course_code"]
-                print(__course_code)
                 __course_record = __course_records[__course_code]
                 __course_record["activity_records"].append(__activity_record)
 
