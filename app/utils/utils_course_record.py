@@ -43,7 +43,8 @@ class CourseRecordUtils(object):
             "activity_done": {},
             "authen":        "/",
 
-            "note":          "备注",
+            "note":          "/",
+            "activity_note": "/",
 
             "createtime":    datetime.datetime.now(),
             "modifytime":    "/",
@@ -62,6 +63,7 @@ class CourseRecordUtils(object):
             "authen":        "认证",     # update manual only
 
             "note":          "备注",
+            "activity_note": "活动备注",
 
             "createtime":    "创建时间",
             "modifytime":    "修改时间",
@@ -91,6 +93,10 @@ class CourseRecordUtils(object):
 
             "status",
             "activity_done",
+            # "authen",
+
+            # "note",
+            "activity_note",
 
             "createtime",
             "modifytime",
@@ -312,6 +318,7 @@ class CourseRecordUtils(object):
             }},
             {"$unwind": "$activity_info"},
             {"$match": {"activity_info.course_code": course_code}},
+            {"$sort": {"activity_code": 1}},
         ]))
 
         # 获取 更新信息
@@ -354,6 +361,15 @@ class CourseRecordUtils(object):
                 status = "未开始"
         if status != course_record["status"]:
             update_info["status"] = status
+
+        # 校验字段 特定字段 活动备注
+        activity_notes = []
+        for activity_record in activity_records:
+            if activity_record["note"] and activity_record["note"] != "/":
+                activity_notes.append(activity_record["note"])
+        activity_note = "\n".join(activity_notes)
+        if activity_note != course_record["activity_note"]:
+            update_info["activity_note"] = activity_note
 
         # 无需更新
         if len(update_info) == 0:
@@ -802,7 +818,6 @@ class CourseRecordUtils(object):
             "save_name": save_name
         }
         return result
-
 
     def save_records_with_detail(self, course_records):
         from .utils_user import user_utils

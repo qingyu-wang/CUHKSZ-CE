@@ -138,6 +138,10 @@ class CourseUtils(object):
             "course_info": None,
         }
 
+        # 校验字段 活动代码
+        if course_code not in self.field_options["course_code"]:
+            return result
+
         # 查询校园卡号 (人员信息)
         campus_idnos_1 = [i["campus_idno"] for i in mongo.coll_user_info.find(
             field_filters["user_info"], {"_id": 0, "campus_idno": 1}

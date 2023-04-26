@@ -30,42 +30,42 @@ class ActivityUtils(object):
     @property
     def new_doc(self):
         __new_doc = {
-            "course_code":    "/",
-            "activity_code":  "/",
-            "activity_type":  "/",
+            "course_code":     "/",
+            "activity_code":   "/",
+            "activity_type":   "/",
 
-            "activity_name":  "/",
-            "activity_note":  "/",
-            "activity_quota": "/",
+            "activity_name":   "/",
+            "activity_detail": "/",
+            "activity_quota":  "/",
 
-            "activity_year":  "/",
-            "activity_term":  "/",
-            "activity_date":  "/",
+            "activity_year":   "/",
+            "activity_term":   "/",
+            "activity_date":   "/",
 
-            "createtime":     datetime.datetime.now(),
-            "modifytime":     "/",
-            "modifyuser":     "/",
+            "createtime":      datetime.datetime.now(),
+            "modifytime":      "/",
+            "modifyuser":      "/",
         }
         return __new_doc
 
     @property
     def field_headers(self):
         __field_headers = {
-            "course_code":    "课程代码", # link to "course_code"
-            "activity_code":  "活动代码", # unique & link to "activity_record"
-            "activity_type":  "活动类型", # important with "course.activity_rules" and "course_record.activity_done"
+            "course_code":     "课程代码", # link to "course_code"
+            "activity_code":   "活动代码", # unique & link to "activity_record"
+            "activity_type":   "活动类型", # important with "course.activity_rules" and "course_record.activity_done"
 
-            "activity_name":  "活动名称",
-            "activity_note":  "活动详情",
-            "activity_quota": "活动名额",
+            "activity_name":   "活动名称",
+            "activity_detail": "活动详情",
+            "activity_quota":  "活动名额",
 
-            "activity_year":  "活动学年",
-            "activity_term":  "活动学期",
-            "activity_date":  "活动日期",
+            "activity_year":   "活动学年",
+            "activity_term":   "活动学期",
+            "activity_date":   "活动日期",
 
-            "createtime":     "创建时间",
-            "modifytime":     "修改时间",
-            "modifyuser":     "修改用户",
+            "createtime":      "创建时间",
+            "modifytime":      "修改时间",
+            "modifyuser":      "修改用户",
         }
         return __field_headers
 
@@ -190,6 +190,12 @@ class ActivityUtils(object):
             "msgs": [],
             "activity_info": None,
         }
+
+        # 校验字段 活动代码
+        if activity_code not in self.field_options["activity_code"]:
+            return result
+
+        # 查询活动信息 (详情)
         activity_infos = list(mongo.coll_activity_info.aggregate([
             # 查询 活动信息
             {"$match": {"activity_code": activity_code}},
@@ -221,7 +227,7 @@ class ActivityUtils(object):
             }}
         ]))
         if not activity_infos:
-            return None
+            return result
         result["activity_info"] = activity_infos[0]
 
         # 后处理 活动概况

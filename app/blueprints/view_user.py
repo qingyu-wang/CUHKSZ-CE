@@ -82,27 +82,28 @@ def info():
                 "authen":        {"header": course_record_field_headers["authen"],        "width": 5},
 
                 "note":          {"header": course_record_field_headers["note"],          "width": 5},
+                "activity_note": {"header": course_record_field_headers["activity_note"], "width": 40},
 
                 # "createtime":    {"header": course_record_field_headers["createtime"],    "width": 5},
                 # "modifytime":    {"header": course_record_field_headers["modifytime"],    "width": 5},
                 # "modifyuser":    {"header": course_record_field_headers["modifyuser"],    "width": 5},
             },
             "activity_info": {
-                # "course_code":    {"header": activity_info_field_headers["course_code"],    "width": 5},
-                "activity_code":  {"header": activity_info_field_headers["activity_code"],    "width": 20},
-                "activity_type":  {"header": activity_info_field_headers["activity_type"],    "width": 10},
+                # "course_code":     {"header": activity_info_field_headers["course_code"],    "width": 5},
+                "activity_code":   {"header": activity_info_field_headers["activity_code"],    "width": 20},
+                "activity_type":   {"header": activity_info_field_headers["activity_type"],    "width": 10},
 
-                # "activity_name":  {"header": activity_info_field_headers["activity_name"],    "width": 5},
-                # "activity_note":  {"header": activity_info_field_headers["activity_note"],    "width": 5},
-                # "activity_quota": {"header": activity_info_field_headers["activity_quota"],    "width": 5},
+                "activity_name":   {"header": activity_info_field_headers["activity_name"],    "width": 5},
+                "activity_detail": {"header": activity_info_field_headers["activity_detail"],    "width": 5},
+                "activity_quota":  {"header": activity_info_field_headers["activity_quota"],   "width": 5},
 
-                # "activity_year":  {"header": activity_info_field_headers["activity_year"],    "width": 5},
-                # "activity_term":  {"header": activity_info_field_headers["activity_term"],    "width": 5},
-                "activity_date":  {"header": activity_info_field_headers["activity_date"],    "width": 10},
+                "activity_year":   {"header": activity_info_field_headers["activity_year"],    "width": 5},
+                "activity_term":   {"header": activity_info_field_headers["activity_term"],    "width": 5},
+                "activity_date":   {"header": activity_info_field_headers["activity_date"],    "width": 10},
 
-                # "createtime":     {"header": activity_info_field_headers["createtime"],    "width": 5},
-                # "modifytime":     {"header": activity_info_field_headers["modifytime"],    "width": 5},
-                # "modifyuser":     {"header": activity_info_field_headers["modifyuser"],    "width": 5},
+                # "createtime":      {"header": activity_info_field_headers["createtime"],    "width": 5},
+                # "modifytime":      {"header": activity_info_field_headers["modifytime"],    "width": 5},
+                # "modifyuser":      {"header": activity_info_field_headers["modifyuser"],    "width": 5},
             },
             "activity_record": {
                 # "activity_code": {"header": activity_record_field_headers["activity_code"], "width": 5},

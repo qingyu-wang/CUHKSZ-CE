@@ -60,16 +60,16 @@ def info():
                 "modifyuser":     {"header": course_info_field_headers["modifyuser"]}
             },
             "activity_info": {
-                "activity_code":  {"header": activity_utils.field_headers["activity_code"],  "width": 15},
-                "activity_type":  {"header": activity_utils.field_headers["activity_type"],  "width": 10},
+                "activity_code":   {"header": activity_utils.field_headers["activity_code"],  "width": 15},
+                "activity_type":   {"header": activity_utils.field_headers["activity_type"],  "width": 10},
 
-                "activity_name":  {"header": activity_utils.field_headers["activity_name"],  "width": 40},
-                "activity_note":  {"header": activity_utils.field_headers["activity_note"],  "width": 40},
-                "activity_quota": {"header": activity_utils.field_headers["activity_quota"], "width": 10},
+                "activity_name":   {"header": activity_utils.field_headers["activity_name"],  "width": 40},
+                "activity_detail": {"header": activity_utils.field_headers["activity_detail"],  "width": 40},
+                "activity_quota":  {"header": activity_utils.field_headers["activity_quota"], "width": 10},
 
-                "activity_year":  {"header": activity_utils.field_headers["activity_year"],  "width": 10},
-                "activity_term":  {"header": activity_utils.field_headers["activity_term"],  "width": 10},
-                "activity_date":  {"header": activity_utils.field_headers["activity_date"],  "width": 10},
+                "activity_year":   {"header": activity_utils.field_headers["activity_year"],  "width": 10},
+                "activity_term":   {"header": activity_utils.field_headers["activity_term"],  "width": 10},
+                "activity_date":   {"header": activity_utils.field_headers["activity_date"],  "width": 10},
             }
         },
         "course_infos": None,
@@ -208,27 +208,28 @@ def record():
                 "authen":        {"header": course_record_field_headers["authen"]},
 
                 "note":          {"header": course_record_field_headers["note"]},
+                "activity_note": {"header": course_record_field_headers["activity_note"]},
 
                 "createtime":    {"header": course_record_field_headers["createtime"]},
                 "modifytime":    {"header": course_record_field_headers["modifytime"]},
                 "modifyuser":    {"header": course_record_field_headers["modifyuser"]},
             },
             "activity_info": {
-                "activity_code": {"header": activity_info_field_headers["activity_code"],  "width": 10},
-                "activity_name": {"header": activity_info_field_headers["activity_name"],  "width": 20},
-                "activity_type": {"header": activity_info_field_headers["activity_type"],  "width": 5},
+                "activity_code":   {"header": activity_info_field_headers["activity_code"],  "width": 10},
+                "activity_name":   {"header": activity_info_field_headers["activity_name"],  "width": 20},
+                "activity_type":   {"header": activity_info_field_headers["activity_type"],  "width": 5},
 
-                # "activity_name": {"header": activity_info_field_headers["activity_name"],  "width": 5},
-                # "activity_note": {"header": activity_info_field_headers["activity_note"],  "width": 5},
-                # "activity_quota":{"header": activity_info_field_headers["activity_quota"], "width": 5},
+                # "activity_name":   {"header": activity_info_field_headers["activity_name"],  "width": 5},
+                # "activity_detail": {"header": activity_info_field_headers["activity_detail"],  "width": 5},
+                # "activity_quota":  {"header": activity_info_field_headers["activity_quota"], "width": 5},
 
-                # "activity_year": {"header": activity_info_field_headers["activity_year"],  "width": 5},
-                # "activity_term": {"header": activity_info_field_headers["activity_term"],  "width": 5},
-                # "activity_date": {"header": activity_info_field_headers["activity_date"],  "width": 5},
+                # "activity_year":   {"header": activity_info_field_headers["activity_year"],  "width": 5},
+                # "activity_term":   {"header": activity_info_field_headers["activity_term"],  "width": 5},
+                # "activity_date":   {"header": activity_info_field_headers["activity_date"],  "width": 5},
 
-                # "createtime":    {"header": activity_info_field_headers["createtime"],     "width": 5},
-                # "modifytime":    {"header": activity_info_field_headers["modifytime"],     "width": 5},
-                # "modifyuser":    {"header": activity_info_field_headers["modifyuser"],     "width": 5},
+                # "createtime":      {"header": activity_info_field_headers["createtime"],     "width": 5},
+                # "modifytime":      {"header": activity_info_field_headers["modifytime"],     "width": 5},
+                # "modifyuser":      {"header": activity_info_field_headers["modifyuser"],     "width": 5},
             },
             "activity_record": {
                 "activity_code": {"header": activity_record_field_headers["activity_code"], "width": 10},
@@ -659,6 +660,8 @@ def data():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["course_info"]:
                     params["course_infos"] = [result_1["course_info"]]
+                else:
+                    params["course_infos"] = []
                 # 保存 - 课程信息
                 if params["course_infos"]:
                     result_2 = course_utils.save_infos(params["course_infos"])

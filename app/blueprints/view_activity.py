@@ -56,7 +56,7 @@ def info():
                 "activity_type":    {"header": activity_info_field_headers["activity_type"]},
 
                 "activity_name":    {"header": activity_info_field_headers["activity_name"]},
-                "activity_note":    {"header": activity_info_field_headers["activity_note"]},
+                "activity_detail":  {"header": activity_info_field_headers["activity_detail"]},
                 "activity_quota":   {"header": activity_info_field_headers["activity_quota"]},
 
                 "activity_year":    {"header": activity_info_field_headers["activity_year"]},
@@ -304,21 +304,21 @@ def info_for_admin():
                 "course_name":      {"header": course_info_field_headers["course_name"]},
             },
             "activity_info": {
-                "course_code":      {"header": activity_info_field_headers["course_code"],    "fixed": False, "default": activity_info_default_doc["course_code"],    "options": activity_info_field_options["course_code"]},
-                "activity_code":    {"header": activity_info_field_headers["activity_code"],  "fixed": False, "default": activity_info_default_doc["activity_code"],  "options": activity_info_field_options["activity_code"]},
-                "activity_type":    {"header": activity_info_field_headers["activity_type"],  "fixed": False, "default": activity_info_default_doc["activity_type"],  "options": activity_info_field_options["activity_type"]},
+                "course_code":      {"header": activity_info_field_headers["course_code"],     "fixed": False, "default": activity_info_default_doc["course_code"],     "options": activity_info_field_options["course_code"]},
+                "activity_code":    {"header": activity_info_field_headers["activity_code"],   "fixed": False, "default": activity_info_default_doc["activity_code"],   "options": activity_info_field_options["activity_code"]},
+                "activity_type":    {"header": activity_info_field_headers["activity_type"],   "fixed": False, "default": activity_info_default_doc["activity_type"],   "options": activity_info_field_options["activity_type"]},
 
-                "activity_name":    {"header": activity_info_field_headers["activity_name"],  "fixed": False, "default": activity_info_default_doc["activity_name"],  "options": None},
-                "activity_note":    {"header": activity_info_field_headers["activity_note"],  "fixed": False, "default": activity_info_default_doc["activity_note"],  "options": None},
-                "activity_quota":   {"header": activity_info_field_headers["activity_quota"], "fixed": False, "default": activity_info_default_doc["activity_quota"], "options": None},
+                "activity_name":    {"header": activity_info_field_headers["activity_name"],   "fixed": False, "default": activity_info_default_doc["activity_name"],   "options": None},
+                "activity_detail":  {"header": activity_info_field_headers["activity_detail"], "fixed": False, "default": activity_info_default_doc["activity_detail"], "options": None},
+                "activity_quota":   {"header": activity_info_field_headers["activity_quota"],  "fixed": False, "default": activity_info_default_doc["activity_quota"],  "options": None},
 
-                "activity_year":    {"header": activity_info_field_headers["activity_year"],  "fixed": False, "default": activity_info_default_doc["activity_year"],  "options": activity_info_field_options["activity_year"]},
-                "activity_term":    {"header": activity_info_field_headers["activity_term"],  "fixed": False, "default": activity_info_default_doc["activity_term"],  "options": activity_info_field_options["activity_term"]},
-                "activity_date":    {"header": activity_info_field_headers["activity_date"],  "fixed": False, "default": activity_info_default_doc["activity_date"],  "options": activity_info_field_options["activity_date"]},
+                "activity_year":    {"header": activity_info_field_headers["activity_year"],   "fixed": False, "default": activity_info_default_doc["activity_year"],   "options": activity_info_field_options["activity_year"]},
+                "activity_term":    {"header": activity_info_field_headers["activity_term"],   "fixed": False, "default": activity_info_default_doc["activity_term"],   "options": activity_info_field_options["activity_term"]},
+                "activity_date":    {"header": activity_info_field_headers["activity_date"],   "fixed": False, "default": activity_info_default_doc["activity_date"],   "options": activity_info_field_options["activity_date"]},
 
-                "createtime":       {"header": activity_info_field_headers["createtime"],     "fixed": True,  "default": activity_info_default_doc["createtime"],     "options": None},
-                "modifytime":       {"header": activity_info_field_headers["modifytime"],     "fixed": True,  "default": activity_info_default_doc["modifytime"],     "options": None},
-                "modifyuser":       {"header": activity_info_field_headers["modifyuser"],     "fixed": True,  "default": activity_info_default_doc["modifyuser"],     "options": None}
+                "createtime":       {"header": activity_info_field_headers["createtime"],      "fixed": True,  "default": activity_info_default_doc["createtime"],      "options": None},
+                "modifytime":       {"header": activity_info_field_headers["modifytime"],      "fixed": True,  "default": activity_info_default_doc["modifytime"],      "options": None},
+                "modifyuser":       {"header": activity_info_field_headers["modifyuser"],      "fixed": True,  "default": activity_info_default_doc["modifyuser"],      "options": None}
             }
         },
         "activity_infos": None,
@@ -516,21 +516,21 @@ def data():
                 "course_name": {"header": course_info_field_headers["course_name"]},
             },
             "activity_info": {
-                "course_code":    {"header": activity_info_field_headers["course_code"]},
-                "activity_code":  {"header": activity_info_field_headers["activity_code"]},
-                "activity_type":  {"header": activity_info_field_headers["activity_type"]},
+                "course_code":     {"header": activity_info_field_headers["course_code"]},
+                "activity_code":   {"header": activity_info_field_headers["activity_code"]},
+                "activity_type":   {"header": activity_info_field_headers["activity_type"]},
 
-                "activity_name":  {"header": activity_info_field_headers["activity_name"]},
-                "activity_note":  {"header": activity_info_field_headers["activity_note"]},
-                "activity_quota": {"header": activity_info_field_headers["activity_quota"]},
+                "activity_name":   {"header": activity_info_field_headers["activity_name"]},
+                "activity_detail": {"header": activity_info_field_headers["activity_detail"]},
+                "activity_quota":  {"header": activity_info_field_headers["activity_quota"]},
 
-                "activity_year":  {"header": activity_info_field_headers["activity_year"]},
-                "activity_term":  {"header": activity_info_field_headers["activity_term"]},
-                "activity_date":  {"header": activity_info_field_headers["activity_date"]},
+                "activity_year":   {"header": activity_info_field_headers["activity_year"]},
+                "activity_term":   {"header": activity_info_field_headers["activity_term"]},
+                "activity_date":   {"header": activity_info_field_headers["activity_date"]},
 
-                "createtime":     {"header": activity_info_field_headers["createtime"]},
-                "modifytime":     {"header": activity_info_field_headers["modifytime"]},
-                "modifyuser":     {"header": activity_info_field_headers["modifyuser"]}
+                "createtime":      {"header": activity_info_field_headers["createtime"]},
+                "modifytime":      {"header": activity_info_field_headers["modifytime"]},
+                "modifyuser":      {"header": activity_info_field_headers["modifyuser"]}
             },
             "activity_overview": {
                 "num_total":   {"header": "总人数"},
@@ -649,6 +649,8 @@ def data():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["activity_info"]:
                     params["activity_infos"] = [result_1["activity_info"]]
+                else:
+                    params["activity_infos"] = []
                 # 保存 - 活动信息
                 if params["activity_infos"]:
                     result_2 = activity_utils.save_infos(params["activity_infos"])
