@@ -140,13 +140,14 @@ class UserUtils(object):
         user_info = mongo.coll_user_info.find_one({"campus_idno": campus_idno})
 
         if not user_info:
-            msg = {
-                "type": "warn",
-                "text": "查询失败: 用户不存在<br>[ %s=%s ]" % (
-                    user_utils.field_headers["campus_idno"], campus_idno,
-                )
-            }
-            result["msgs"].append(msg)
+            pass
+            # msg = {
+            #     "type": "warn",
+            #     "text": "查询失败: 用户不存在<br>[ %s=%s ]" % (
+            #         user_utils.field_headers["campus_idno"], campus_idno,
+            #     )
+            # }
+            # result["msgs"].append(msg)
 
         # 角色 学生
         elif user_info["campus_role"] == "学生":

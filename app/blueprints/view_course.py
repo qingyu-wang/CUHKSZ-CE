@@ -100,6 +100,8 @@ def info():
             params["msgs"].extend(result_1["msgs"])
             if result_1["course_info"]:
                 params["course_infos"] = [result_1["course_info"]]
+            else:
+                params["course_infos"] = []
             # 保存 - 课程信息
             if params["course_infos"]:
                 result_2 = course_utils.save_infos(params["course_infos"])
@@ -143,6 +145,8 @@ def info():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["course_info"]:
                     params["course_infos"] = [result_1["course_info"]]
+                else:
+                    params["course_infos"] = []
                 # 保存 - 课程信息
                 if params["course_infos"]:
                     result_2 = course_utils.save_infos(params["course_infos"])
@@ -269,19 +273,21 @@ def record():
             params["msgs"].extend(result_1["msgs"])
             if result_1["course_record"]:
                 params["course_records"] = [result_1["course_record"]]
-        # 保存 - 课程记录
-        if params["course_records"]:
-            result_2 = course_record_utils.save_records(params["course_records"])
-            params["msgs"].extend(result_2["msgs"])
-            params["file_infos"] = [result_2["file_info"]]
-            # 保存 - 活动记录
-            activity_records = []
-            for course_record in params["course_records"]:
-                activity_records.extend(course_record["activity_records"])
-            if activity_records:
-                result_3 = activity_record_utils.save_records(activity_records)
-                params["msgs"].extend(result_3["msgs"])
-                params["file_infos"].append(result_3["file_info"])
+            else:
+                params["course_records"] = []
+            # 保存 - 课程记录
+            if params["course_records"]:
+                result_2 = course_record_utils.save_records(params["course_records"])
+                params["msgs"].extend(result_2["msgs"])
+                params["file_infos"] = [result_2["file_info"]]
+                # 保存 - 活动记录
+                activity_records = []
+                for course_record in params["course_records"]:
+                    activity_records.extend(course_record["activity_records"])
+                if activity_records:
+                    result_3 = activity_record_utils.save_records(activity_records)
+                    params["msgs"].extend(result_3["msgs"])
+                    params["file_infos"].append(result_3["file_info"])
         return render_template(template_path, **params)
 
     # POST
@@ -305,19 +311,21 @@ def record():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["course_record"]:
                     params["course_records"] = [result_1["course_record"]]
-            # 保存 - 课程记录
-            if params["course_records"]:
-                result_2 = course_record_utils.save_records(params["course_records"])
-                params["msgs"].extend(result_2["msgs"])
-                params["file_infos"] = [result_2["file_info"]]
-                # 保存 - 活动记录
-                activity_records = []
-                for course_record in params["course_records"]:
-                    activity_records.extend(course_record["activity_records"])
-                if activity_records:
-                    result_3 = activity_record_utils.save_records(activity_records)
-                    params["msgs"].extend(result_3["msgs"])
-                    params["file_infos"].append(result_3["file_info"])
+                else:
+                    params["course_records"] = []
+                # 保存 - 课程记录
+                if params["course_records"]:
+                    result_2 = course_record_utils.save_records(params["course_records"])
+                    params["msgs"].extend(result_2["msgs"])
+                    params["file_infos"] = [result_2["file_info"]]
+                    # 保存 - 活动记录
+                    activity_records = []
+                    for course_record in params["course_records"]:
+                        activity_records.extend(course_record["activity_records"])
+                    if activity_records:
+                        result_3 = activity_record_utils.save_records(activity_records)
+                        params["msgs"].extend(result_3["msgs"])
+                        params["file_infos"].append(result_3["file_info"])
             return render_template(template_path, **params)
 
     return render_error_template(message="系统错误")
@@ -386,6 +394,8 @@ def info_for_admin():
             params["msgs"].extend(result_1["msgs"])
             if result_1["course_info"]:
                 params["course_infos"] = [result_1["course_info"]]
+            else:
+                params["course_infos"] = []
             # 保存
             if params["course_infos"]:
                 result_2 = course_utils.save_infos(params["course_infos"])
@@ -412,6 +422,8 @@ def info_for_admin():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["course_info"]:
                     params["course_infos"] = [result_1["course_info"]]
+                else:
+                    params["course_infos"] = []
                 # 保存
                 if params["course_infos"]:
                     result_2 = course_utils.save_infos(params["course_infos"])
@@ -437,6 +449,8 @@ def info_for_admin():
             params["msgs"].extend(result_2["msgs"])
             if result_2["course_info"]:
                 params["course_infos"] = [result_2["course_info"]]
+            else:
+                params["course_infos"] = []
             # 保存
             if params["course_infos"]:
                 result_3 = course_utils.save_infos(params["course_infos"])
@@ -467,7 +481,9 @@ def info_for_admin():
                 params["msgs"].extend(result_2["msgs"])
                 if result_2["course_info"]:
                     params["course_infos"] = [result_2["course_info"]]
-                 # 保存
+                else:
+                    params["course_infos"] = []
+                # 保存
                 if params["course_infos"]:
                     result_3 = course_utils.save_infos(params["course_infos"])
                     params["msgs"].extend(result_3["msgs"])
@@ -603,6 +619,8 @@ def data():
             params["msgs"].extend(result_1["msgs"])
             if result_1["course_info"]:
                 params["course_infos"] = [result_1["course_info"]]
+            else:
+                params["course_infos"] = []
             # 保存 - 课程信息
             if params["course_infos"]:
                 result_2 = course_utils.save_infos(params["course_infos"])

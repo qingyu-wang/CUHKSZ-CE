@@ -164,7 +164,7 @@
                                 <tr>
                             {% endif %}
                                     <td style="text-align: center; width: 15rem">
-                                        <a href="{{ url_for("view_user.info_for_admin", campus_idno=__user_info["campus_idno"]) }}" class="text-link", style="font-size: 0.75rem">
+                                        <a href="{{ url_for("view_user.info", campus_idno=__user_info["campus_idno"]) }}" class="text-link", style="font-size: 0.75rem">
                                             {{ __user_info["campus_idno"] }}<br>{{ __user_info["name"] }}</a>
                                     </td>
                             {% if loop.last %}

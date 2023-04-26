@@ -141,6 +141,8 @@ def info():
             params["msgs"].extend(result["msgs"])
             if result["user_info"]:
                 params["user_infos"] = [result["user_info"]]
+            else:
+                params["user_infos"] = []
         elif name:
             params["config"]["search"]["name"]["default"] = name
             result = user_utils.get_infos_by_name(name=name)
@@ -171,6 +173,8 @@ def info():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["user_info"]:
                     params["user_infos"] = [result_1["user_info"]]
+                else:
+                    params["user_infos"] = []
                 # 保存 - 活动信息
                 if params["user_infos"]:
                     course_records = []
@@ -333,11 +337,13 @@ def info_for_admin():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["user_info"]:
                     params["user_infos"] = [result_1["user_info"]]
-            # 保存
-            if params["user_infos"]:
-                result_2 = user_utils.save_infos(params["user_infos"])
-                params["msgs"].extend(result_2["msgs"])
-                params["file_infos"] = [result_2["file_info"]]
+                else:
+                    params["user_infos"] = []
+                # 保存
+                if params["user_infos"]:
+                    result_2 = user_utils.save_infos(params["user_infos"])
+                    params["msgs"].extend(result_2["msgs"])
+                    params["file_infos"] = [result_2["file_info"]]
             return render_template(template_path, **params)
 
         # POST method=search_name
@@ -354,11 +360,11 @@ def info_for_admin():
                 result = user_utils.get_infos_by_name(name=name)
                 params["msgs"].extend(result["msgs"])
                 params["user_infos"] = result["user_infos"]
-            # 保存
-            if params["user_infos"]:
-                result_2 = user_utils.save_infos(params["user_infos"])
-                params["msgs"].extend(result_2["msgs"])
-                params["file_infos"] = [result_2["file_info"]]
+                # 保存
+                if params["user_infos"]:
+                    result_2 = user_utils.save_infos(params["user_infos"])
+                    params["msgs"].extend(result_2["msgs"])
+                    params["file_infos"] = [result_2["file_info"]]
             return render_template(template_path, **params)
 
         # POST method=update
@@ -383,6 +389,8 @@ def info_for_admin():
             params["msgs"].extend(result_2["msgs"])
             if result_2["user_info"]:
                 params["user_infos"] = [result_2["user_info"]]
+            else:
+                params["user_infos"] = []
             # 保存
             if params["user_infos"]:
                 result_3 = user_utils.save_infos(params["user_infos"])

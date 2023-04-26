@@ -87,6 +87,8 @@ def info():
             params["msgs"].extend(result_1["msgs"])
             if result_1["activity_info"]:
                 params["activity_infos"] = [result_1["activity_info"]]
+            else:
+                params["activity_infos"] = []
             # 保存
             if params["activity_infos"]:
                 result_2 = activity_utils.save_infos(params["activity_infos"])
@@ -140,6 +142,8 @@ def info():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["activity_info"]:
                     params["activity_infos"] = [result_1["activity_info"]]
+                else:
+                    params["activity_infos"] = []
                 # 保存
                 if params["activity_infos"]:
                     result_2 = activity_utils.save_infos(params["activity_infos"])
@@ -230,11 +234,13 @@ def record():
             params["msgs"].extend(result_1["msgs"])
             if result_1["activity_record"]:
                 params["activity_records"] = [result_1["activity_record"]]
-        # 保存
-        if params["activity_records"]:
-            result_2 = activity_record_utils.save_records(params["activity_records"])
-            params["msgs"].extend(result_2["msgs"])
-            params["file_infos"] = [result_2["file_info"]]
+            else:
+                params["activity_records"] = []
+            # 保存
+            if params["activity_records"]:
+                result_2 = activity_record_utils.save_records(params["activity_records"])
+                params["msgs"].extend(result_2["msgs"])
+                params["file_infos"] = [result_2["file_info"]]
         return render_template(template_path, **params)
 
     # POST
@@ -258,11 +264,13 @@ def record():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["activity_record"]:
                     params["activity_records"] = [result_1["activity_record"]]
-            # 保存
-            if params["activity_records"]:
-                result_2 = activity_record_utils.save_records(params["activity_records"])
-                params["msgs"].extend(result_2["msgs"])
-                params["file_infos"] = [result_2["file_info"]]
+                else:
+                    params["activity_records"] = []
+                # 保存
+                if params["activity_records"]:
+                    result_2 = activity_record_utils.save_records(params["activity_records"])
+                    params["msgs"].extend(result_2["msgs"])
+                    params["file_infos"] = [result_2["file_info"]]
             return render_template(template_path, **params)
 
     return render_error_template(message="系统错误")
@@ -340,6 +348,8 @@ def info_for_admin():
             params["msgs"].extend(result_1["msgs"])
             if result_1["activity_info"]:
                 params["activity_infos"] = [result_1["activity_info"]]
+            else:
+                params["activity_infos"] = []
             # 保存
             if params["activity_infos"]:
                 result_2 = activity_utils.save_infos(params["activity_infos"])
@@ -396,6 +406,8 @@ def info_for_admin():
                 params["msgs"].extend(result_1["msgs"])
                 if result_1["activity_info"]:
                     params["activity_infos"] = [result_1["activity_info"]]
+                else:
+                    params["activity_infos"] = []
                 # 保存
                 if params["activity_infos"]:
                     result_2 = activity_utils.save_infos(params["activity_infos"])
@@ -421,6 +433,8 @@ def info_for_admin():
             params["msgs"].extend(result_2["msgs"])
             if result_2["activity_info"]:
                 params["activity_infos"] = [result_2["activity_info"]]
+            else:
+                params["activity_infos"] = []
             # 保存
             if params["activity_infos"]:
                 result_3 = activity_utils.save_infos(params["activity_infos"])
@@ -451,7 +465,9 @@ def info_for_admin():
                 params["msgs"].extend(result_2["msgs"])
                 if result_2["activity_info"]:
                     params["activity_infos"] = [result_2["activity_info"]]
-                 # 保存
+                else:
+                    params["activity_infos"] = []
+                # 保存
                 if params["activity_infos"]:
                     result_3 = activity_utils.save_infos(params["activity_infos"])
                     params["msgs"].extend(result_3["msgs"])
@@ -585,6 +601,8 @@ def data():
             params["msgs"].extend(result_1["msgs"])
             if result_1["activity_info"]:
                 params["activity_infos"] = [result_1["activity_info"]]
+            else:
+                params["activity_infos"] = []
             # 保存 - 活动信息
             if params["activity_infos"]:
                 result_2 = activity_utils.save_infos(params["activity_infos"])
