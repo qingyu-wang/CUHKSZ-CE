@@ -154,6 +154,11 @@
                                 {% set __status_2 = "status-undone" %}
                             {% endif %}
                             <hr>
+                            <div class="box-invis">
+                                <div class="content">
+                                    <h3>{{ __course_record["course_code"] }} 课程记录</h3>
+                                </div>
+                            </div>
                             <div class="box-invis-scroll-x">
                                 <table class="table is-hoverable fix-header">
                                     <tbody>
@@ -211,7 +216,11 @@
                                 {% set __title_2 = "活动记录" %}
                                 {% set __categ_1 = "activity_info" %}
                                 {% set __categ_2 = "activity_record" %}
-                                <hr>
+                                <div class="box-invis">
+                                    <div class="content">
+                                        <h3>{{ __course_record["course_code"] }} 活动记录</h3>
+                                    </div>
+                                </div>
                                 <div class="box-invis-scroll-x">
                                     <table class="table is-hoverable fix-header">
                                         <tbody>

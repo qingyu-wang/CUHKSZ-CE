@@ -567,6 +567,7 @@ def data():
                 "authen":        {"header": course_record_field_headers["authen"],        "width": 5},
 
                 "note":          {"header": course_record_field_headers["note"],          "width": 5},
+                "activity_note": {"header": course_record_field_headers["activity_note"], "width": 5},
 
                 # "createtime":    {"header": course_record_field_headers["createtime"],    "width": 5},
                 # "modifytime":    {"header": course_record_field_headers["modifytime"],    "width": 5},

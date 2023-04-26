@@ -862,6 +862,8 @@ class CourseRecordUtils(object):
                 "modifyuser",
             ]:
                 course_record_field_headers.pop(__field)
+            # 活动进度 - 单独处理
+            course_record_field_headers.pop("activity_done")
             course_record_header_fields = {header: field for field, header in course_record_field_headers.items()}
 
             alignment = Alignment(
@@ -880,39 +882,57 @@ class CourseRecordUtils(object):
             }
 
             # 列宽
-            for col, _ in enumerate(user_header_fields):
-                ws.column_dimensions[get_column_letter(col+1)].width = 20
-            for col, _ in enumerate(course_record_header_fields, start=len(user_header_fields)):
-                ws.column_dimensions[get_column_letter(col+1)].width = 20
+            for col, _ in enumerate(user_header_fields, start=1):
+                ws.column_dimensions[get_column_letter(col)].width = 20
+            for col, _ in enumerate(course_record_header_fields, start=len(user_header_fields)+1):
+                ws.column_dimensions[get_column_letter(col)].width = 20
 
             # 标题
             for col, header in enumerate(user_header_fields, start=1):
                 cell = ws.cell(row=1, column=col)
                 cell.value = header
                 cell.alignment = aligntments[header]
-                cell.font = fonts["header"]
                 cell.number_format = numbers.FORMAT_TEXT
+                cell.font = fonts["header"]
             for col, header in enumerate(course_record_header_fields, start=len(user_header_fields)+1):
                 cell = ws.cell(row=1, column=col)
                 cell.value = header
                 cell.alignment = aligntments[header]
-                cell.font = fonts["header"]
                 cell.number_format = numbers.FORMAT_TEXT
+                cell.font = fonts["header"]
 
             # 内容
+            extra_headers = {}
             for row, course_record in enumerate(course_records, start=2):
                 for col, header in enumerate(user_header_fields, start=1):
                     field = user_header_fields[header]
                     cell = ws.cell(row=row, column=col)
                     cell.value = str(course_record["user_info"][field]).strip().replace("'", '"')
-                    cell.number_format = numbers.FORMAT_TEXT
                     cell.alignment = aligntments[header]
+                    cell.number_format = numbers.FORMAT_TEXT
                 for col, header in enumerate(course_record_header_fields, start=len(user_header_fields)+1):
                     field = course_record_header_fields[header]
                     cell = ws.cell(row=row, column=col)
                     cell.value = str(course_record[field]).strip().replace("'", '"')
-                    cell.number_format = numbers.FORMAT_TEXT
                     cell.alignment = aligntments[header]
+                    cell.number_format = numbers.FORMAT_TEXT
+                # 活动进度 - 单独处理
+                for extra_header, count in course_record["activity_done"].items():
+                    if extra_header not in extra_headers:
+                        extra_headers[extra_header] = len(user_header_fields)+len(course_record_header_fields)+len(extra_headers)+1
+                        col = extra_headers[extra_header]
+                        ws.column_dimensions[get_column_letter(col)].width = 30
+                        cell = ws.cell(row=1, column=col)
+                        cell.value = "活动进度: %s" % extra_header
+                        cell.alignment = alignment
+                        cell.number_format = numbers.FORMAT_TEXT
+                        cell.font = fonts["header"]
+                    if count != 0:
+                        col = extra_headers[extra_header]
+                        cell = ws.cell(row=row, column=col)
+                        cell.value = count
+                        cell.alignment = alignment
+                        cell.number_format = numbers.FORMAT_TEXT
 
             wb.save(file_path)
 
