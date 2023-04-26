@@ -104,7 +104,7 @@ class DashboardUtils(object):
             })
             return result
         activity_rules = course_info["activity_rules"]
-        activity_types = ["已完成书院活动"] + sorted(list({activity_type 
+        activity_types = ["已完成\"大型活动\"或\"常规活动\""] + sorted(list({activity_type 
             for activity_rule in activity_rules 
             for activity_type in activity_rule if activity_type
         }))
@@ -124,7 +124,7 @@ class DashboardUtils(object):
                 group_config[acitivty_type] = {"$sum": {"$cond": [
                     {"$gte": ["$activity_done.%s" % acitivty_type, count]}, 1, 0
                 ]}}
-        group_config["已完成书院活动"] = {"$sum": {"$cond": [
+        group_config["已完成\"大型活动\"或\"常规活动\""] = {"$sum": {"$cond": [
             {"$or" : [
                 {"$gte": ["$activity_done.%s" % acitivty_type, count]}
                 for activity_rule in activity_rules

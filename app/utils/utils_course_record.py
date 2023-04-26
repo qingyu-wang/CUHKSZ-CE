@@ -335,8 +335,8 @@ class CourseRecordUtils(object):
         else:
             activity_rules = course_info["activity_rules"]
             is_doing = False
-            is_done  = True
             for activity_rule in activity_rules:
+                is_done  = True
                 for activity_type in activity_rule:
                     rule_num = activity_rule[activity_type]
                     done_num = activity_done.get(activity_type, 0)

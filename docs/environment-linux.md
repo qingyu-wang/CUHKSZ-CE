@@ -22,7 +22,7 @@ pip install pymongo[srv]
 # install https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html
 sudo apt-get install libaio1
 conda install cx_oracle
-# modify "lib_dir" in utils/utils_oracle.py
+# modify "oracle_lib_dir" in app/utils/utils_config.py
 ```
 
 ## Deploy - Gunicorn

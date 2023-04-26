@@ -21,7 +21,7 @@ pip install pymongo[srv]
 # Oracle
 # install https://www.oracle.com/database/technologies/instant-client/winx64-64-downloads.html
 conda install -y cx_oracle 
-# modify "lib_dir" in utils/utils_oracle.py
+# modify "oracle_lib_dir" in app/utils/utils_config.py
 
 # Windows
 conda install -y pywin32
