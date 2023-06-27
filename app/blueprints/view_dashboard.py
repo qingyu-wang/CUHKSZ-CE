@@ -6,6 +6,7 @@ from flask_login import login_required, current_user
 
 from ..utils.utils_auth import UserRole
 from ..utils.utils_dashboard import dashboard_utils
+from ..utils.utils_course import course_utils
 from ..utils.utils_course_record import course_record_utils
 from ..utils.utils_error import render_error_template
 from ..utils.utils_index import get_nav
@@ -29,6 +30,7 @@ def overview():
     template_path = "dashboard_overview.html"
 
     # Params
+    course_info_field_options   = course_utils.field_options
     course_record_field_options = course_record_utils.field_options
     user_info_field_headers     = user_utils.field_headers
     user_info_field_options     = user_utils.field_options
@@ -40,7 +42,7 @@ def overview():
                 "campus_grade": {"header": user_info_field_headers["campus_grade"], "options": [i for i in user_info_field_options["campus_grade"]      if i != "/"]},
                 "campus_year":  {"header": user_info_field_headers["campus_year"],  "options": [i for i in user_info_field_options["campus_year"][::-1] if i != "/"]},
             },
-            "2nd_categ_options": course_record_field_options["course_code"],
+            "2nd_categ_options": course_info_field_options["course_code"],
             "3rd_categ_options": ["总计"] + [i for i in ["已认证", "已完成", "进行中", "未开始"] if i in course_record_field_options["status"]],
         },
         "overview_infos": None,

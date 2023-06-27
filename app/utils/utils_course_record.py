@@ -554,11 +554,11 @@ class CourseRecordUtils(object):
                         continue
                     # 转义字段
                     field = course_record_header_fields[header]
-                    # 提取字段 活动代码
+                    # 提取字段 课程代码
                     if field == "course_code":
                         course_code = value
                         continue
-                    # 提取字段 活动代码
+                    # 提取字段 校园卡号
                     if field == "campus_idno":
                         campus_idno = value
                         continue
@@ -580,7 +580,7 @@ class CourseRecordUtils(object):
                     # 记录字段
                     update_info[field] = value
 
-                # 校验字段 定位字段 活动代码
+                # 校验字段 定位字段 课程代码
                 if mongo.coll_course_info.count_documents({"course_code": course_code}) == 0:
                     result["counts"]["error"] += 1
                     result["msgs"].append({
