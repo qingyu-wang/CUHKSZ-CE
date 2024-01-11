@@ -2,12 +2,11 @@
 
 # Custom File
 .DS_Store
-DEPLOY.md
-app/utils/utils_config.py
-
-# Custom Directory
 .vscode/
+
 app/data/
+app/utils/utils_config.py
+DEPLOY.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
