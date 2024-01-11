@@ -1,6 +1,7 @@
 # https://github.com/github/gitignore/blob/main/Python.gitignore
 
 # Custom File
+.DS_Store
 DEPLOY.md
 app/utils/utils_config.py
 
